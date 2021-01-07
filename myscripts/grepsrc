@@ -1,0 +1,5 @@
+#! /usr/local/bin/bash
+
+keyword="$1"
+
+grep -insrIE "${keyword}" ~/work/blendopt/
