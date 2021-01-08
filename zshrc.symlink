@@ -2,7 +2,7 @@
 source ~/.profile
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=${HOME}/custom_shell_settings
+ZSH_CUSTOM=${HOME}/dotfiles/custom
 
 # Path to oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -23,6 +23,12 @@ ZSH_TMUX_AUTOCONNECT=true
 # Enable command auto-correction.
 ENABLE_CORRECTION="true"
 
+# Set zsh completion cache file location
+if [ -z "$ZSH_COMPDUMP" ]; then
+  mkdir -p ${HOME}/.cache/zsh
+  ZSH_COMPDUMP="${HOME}/.cache/zsh/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+fi
+
 # Display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
@@ -35,7 +41,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx brew tmux zsh-autosuggestions web-search)
+plugins=(git osx tmux zsh-autosuggestions web-search)
 
 source $ZSH/oh-my-zsh.sh
 

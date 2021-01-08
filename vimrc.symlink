@@ -1,5 +1,5 @@
 scriptencoding utf-8
-source ~/.config/nvim/plugins.vim
+source ~/dotfiles/nvim/plugins.vim
 
 set runtimepath+=~/.config/nvim
 set runtimepath+=~/.vim/plugged

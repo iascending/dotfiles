@@ -1,0 +1,1 @@
+/Users/liqiang/dotfiles/custom/themes/spaceship-prompt/spaceship.zsh-theme
