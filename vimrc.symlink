@@ -358,6 +358,10 @@ function! OnChangeVueSubtype(subtype)
 endfunction
 autocmd CursorMoved *.vue call OnChangeVueSubtype(GetVueSubtype())
 
+" enable indentation line
+let g:indentLine_enabled = 1
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+
 " settings for vimspector
 "let g:vimspector_enable_mappings = 'HUMAN'
 

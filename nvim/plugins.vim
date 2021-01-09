@@ -30,6 +30,9 @@ Plug 'rstacruz/vim-closer'
 " vim-commentary
 Plug 'tpope/vim-commentary'
 
+" indentation
+Plug 'yggdroot/indentline'
+
 " Improved motion in Vim
 Plug 'easymotion/vim-easymotion'
 
