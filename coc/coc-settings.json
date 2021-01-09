@@ -1,0 +1,29 @@
+{
+  //This file is symbolic linked with ~/.vim/coc-settings.json
+  "suggest.echodocSupport": true,
+  "suggest.maxCompleteItemCount": 20,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "javascriptreact",
+    "typescript.tsx"
+  ],
+  "eslint.filetypes": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact",
+    "typescript.tsx"
+  ],
+  "diagnostic.errorSign": "•",
+  "diagnostic.warningSign": "•",
+  "diagnostic.infoSign": "•",
+  "python.pythonPath": "/Users/liqiang/.virtualenvs/blendopt/bin/python3",
+  "list.maxPreviewHeight": 30,
+  // "list.previewSplitRight": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Path": "/Users/liqiang/.virtualenvs/blendopt/bin/flake8"
+}
