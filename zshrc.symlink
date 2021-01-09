@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-source ~/.profile
+source ~/dotfiles/profile
 
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=${HOME}/dotfiles/custom
@@ -161,10 +161,4 @@ alias top="vtop --theme=wizard"
 alias ls="colorls --sd"
 alias ll="colorls -la --sd"
 
-# set frequently used aliases
-#alias ll="ls -alhG"
-alias grep="grep -i"
-alias back="source back"
-alias killport="source killport"
-alias glog="git log | vim -R -"
 
