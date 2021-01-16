@@ -2,14 +2,14 @@
   //This file is symbolic linked with ~/.vim/coc-settings.json
   "suggest.echodocSupport": true,
   "suggest.maxCompleteItemCount": 20,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "javascript",
-    "typescript",
-    "typescriptreact",
-    "json",
-    "javascriptreact",
-    "typescript.tsx"
-  ],
+  // coc.preferences.formatOnSaveFiletypes: [
+  //   "javascript",
+  //   "typescript",
+  //   "typescriptreact",
+  //   "json",
+  //   "javascriptreact",
+  //   "typescript.tsx"
+  // ],
   "eslint.filetypes": [
     "javascript",
     "typescript",

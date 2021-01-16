@@ -41,7 +41,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx tmux zsh-autosuggestions web-search)
+plugins=(git osx tmux postgres zsh-autosuggestions web-search)
 
 source $ZSH/oh-my-zsh.sh
 

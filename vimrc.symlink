@@ -5,7 +5,7 @@ set runtimepath+=~/.config/nvim
 set runtimepath+=~/.vim/plugged
 
 " set path for :find config files
-set path+=~/**1,~/.vim/**,~/.config/**,~/Desktop/Projects/useful-commands/**
+set path+=~/**1,~/.vim/**,~/.config/**,~/work/preprocess/**,~/Desktop/Projects/useful-commands/**
 
 " Set encoding for editor itself, scriptencoding for vim scripts
 set encoding=utf-8
@@ -264,8 +264,12 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 
 " Custom icons for expandable/expanded directories
-let g:NERDTreeDirArrowExpandable = '⬏'
-let g:NERDTreeDirArrowCollapsible = '⬎'
+" let g:NERDTreeDirArrowExpandable = '►'
+" let g:NERDTreeDirArrowCollapsible = '▼'
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
+let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 
 " Hide certain files and directories from NERDTree
 let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']

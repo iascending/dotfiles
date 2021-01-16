@@ -1,0 +1,29 @@
+# start named tmux session bl
+tmux has-session -t=bl 2>/dev/null
+if [ "$?" -ne 0 ]
+then
+  tmux rename-session -t 0 bl || tmux new -s bl
+fi
+
+# rename server window and start postgres
+tmux rename-window -t 1 "server"
+if pgrep postgres >/dev/null 2>&1
+then
+  echo "Postgres is running"
+else
+  tmux send-keys "startpost" Enter
+fi
+
+# source python virtualenv
+tmux send-keys "cd ~/work/blendopt" Enter
+tmux send-keys "workon blendopt" Enter
+
+# create panes  run frontend server
+tmux splitw -h
+tmux send-keys "cd ~/work/blendopt/app/client" Enter
+tmux send-keys "npm run dev" Enter
+
+tmux select-pane -L
+tmux new-window -n "editor"
+tmux send-keys "cd ~/work/blendopt" Enter
+
