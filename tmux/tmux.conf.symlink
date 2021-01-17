@@ -124,4 +124,3 @@ set-hook -g 'after-split-window' 'run-shell -b "if [ \#{window_zoomed_flag} -gt 
 
 # Initialize TMUX plugin manager
 run '~/.tmux/plugins/tpm/tpm'
-

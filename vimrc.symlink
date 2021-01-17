@@ -14,8 +14,7 @@ set encoding=utf-8
 set mouse=a
 
 " Map leader key to space
-let g:mapleader=" "
-let maplocalleader="\<Home>"
+let mapleader=" "
 
 " Enable true color support
 set termguicolors
@@ -516,7 +515,7 @@ map <leader>w <Plug>(easymotion-bd-w)
 cmap w!! w !sudo tee %
 
 " Generate jsdoc for function under cursor
-nmap <leader>jd :JsDoc<CR>
+" nmap <leader>jd :JsDoc<CR>
 
 " vim-fugitive to show commits for every line
 nnoremap <Leader>gb :Gblame<CR>
@@ -571,25 +570,57 @@ nnoremap <leader>cd :cd %:p:h<CR>
 " Copy the full path of current buffer
 nnoremap <silent> <leader>cp :let @+=expand('%:p')<CR>
 
-" Switch vim windows
-nnoremap <silent> <leader>h :wincmd h<CR>
-nnoremap <silent> <leader>j :wincmd j<CR>
-nnoremap <silent> <leader>k :wincmd k<CR>
-nnoremap <silent> <leader>l :wincmd l<CR>
+" Switch between windows and panes
+" Wrap window move cursor
+function! s:GotoNextWindow( direction, count )
+  let l:prevWinNr = winnr()
+  execute a:count . 'wincmd' a:direction
+  return winnr() != l:prevWinNr
+endfunction
+
+function! s:JumpWithWrap( direction, opposite )
+  if ! s:GotoNextWindow(a:direction, v:count1)
+    call s:GotoNextWindow(a:opposite, 999)
+  endif
+endfunction
+nnoremap <silent> <leader>h :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
+nnoremap <silent> <leader>j :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
+nnoremap <silent> <leader>k :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
+nnoremap <silent> <leader>l :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
+nnoremap <silent> <leader><Left> :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
+nnoremap <silent> <leader><Down> :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
+nnoremap <silent> <leader><Up> :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
+nnoremap <silent> <leader><Right> :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
+
+" toggle window size
+function! ToggleZoom(zoom)
+  if exists("t:restore_zoom") && (a:zoom == v:true || t:restore_zoom.win != winnr())
+      exec t:restore_zoom.cmd
+      unlet t:restore_zoom
+  elseif a:zoom
+      let t:restore_zoom = { 'win': winnr(), 'cmd': winrestcmd() }
+      exec "normal \<C-W>\|\<C-W>_"
+  endif
+endfunction
+augroup restorezoom
+    au WinEnter * silent! :call ToggleZoom(v:false)
+augroup END
+nnoremap <silent> <Leader>g :call ToggleZoom(v:true)<CR>
+
+" close all windows except current one
 nnoremap <silent> <leader>wo :wincmd o<CR>
-nnoremap <silent> <leader>wr :wincmd r<CR>
-nnoremap <silent> <leader>ww :wincmd w<CR>
+" close current window
 nnoremap <silent> <leader>wc :wincmd c<CR>
+" normalize split size
 nnoremap <silent> <leader>w= :wincmd =<CR>
-nnoremap <silent> <leader>w\ :wincmd \|<CR>
-nnoremap <silent> <leader>w- :wincmd _<CR>
-nnoremap <silent> <leader>wv :wincmd v<CR>
+" open a new vertical split
+nnoremap <silent> <leader>\ :wincmd v<CR>
 " Close a window without resizing
 nnoremap <silent> <leader>d :bp\|bd #<CR>
 
 " Switch between horizontal and vertical split windows
-nnoremap <silent> <leader>hw :windo wincmd K<CR>
-nnoremap <silent> <leader>vw :windo wincmd H<CR>
+nnoremap <silent> <leader>wh :windo wincmd K<CR>
+nnoremap <silent> <leader>wv :windo wincmd H<CR>
 
 " Comment and uncomment code block
 noremap cc :s,^\(\s*\)[^# \t]\@=,\1#,e<CR>:nohls<CR>zvj

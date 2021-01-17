@@ -158,7 +158,7 @@ export NVIM_TUI_ENABLE_TRUE_COLOR=1
 # Aliases
 alias vim="vim"
 alias top="vtop --theme=wizard"
-alias ls="colorls --sd"
-alias ll="colorls -la --sd"
-
+# alias ls="colorls --sd"
+# alias ll="colorls -la --sd"
+alias ll="ls -alhG"
 
