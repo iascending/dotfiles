@@ -101,5 +101,8 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " viminspector -- vim debugger
 Plug 'puremourning/vimspector'
 
+" vim easy align
+Plug 'junegunn/vim-easy-align'
+
 " Initialize plugin system
 call plug#end()
