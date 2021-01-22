@@ -536,11 +536,21 @@ map <leader>vl :VimuxRunLastCommand<CR>
 
  " vim-easy-align shortcuts
  " Start interactive EasyAlign in visual mode (e.g. vipga)
- xmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
- 
+
+" From nelstrom/vim-visual-star-search. It  makes * and # work on visual mode too.
+function! s:VSetSearch(cmdtype)
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>N
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>N
+
 " ============================================================================ "
 " ===                                 MISC.                                === "
 " ============================================================================ "
@@ -632,10 +642,6 @@ nnoremap <silent> <leader>d :bp\|bd #<CR>
 " Switch between horizontal and vertical split windows
 nnoremap <silent> <leader>wh :windo wincmd K<CR>
 nnoremap <silent> <leader>wv :windo wincmd H<CR>
-
-" Comment and uncomment code block
-noremap cc :s,^\(\s*\)[^# \t]\@=,\1#,e<CR>:nohls<CR>zvj
-noremap cu :s,^\(\s*\)#\s\@!,\1,e<CR>:nohls<CR>zvj
 
 " Toggle - inclusion in keyword
 nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+' : '-') . '=-<cr>:set iskeyword?<cr>'
