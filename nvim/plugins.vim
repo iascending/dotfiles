@@ -104,5 +104,8 @@ Plug 'puremourning/vimspector'
 " vim easy align
 Plug 'junegunn/vim-easy-align'
 
+" vim-tmux-navigator
+Plug 'christoomey/vim-tmux-navigator'
+
 " Initialize plugin system
 call plug#end()
