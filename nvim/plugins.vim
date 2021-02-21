@@ -107,5 +107,9 @@ Plug 'junegunn/vim-easy-align'
 " vim-tmux-navigator
 Plug 'christoomey/vim-tmux-navigator'
 
+" open-browser
+Plug 'tyru/open-browser.vim'
+Plug 'tyru/open-browser-github.vim'
+
 " Initialize plugin system
 call plug#end()

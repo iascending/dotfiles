@@ -155,10 +155,15 @@ export EDITOR='vim'
 # Enabled true color support for terminals
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
 
+# zsh vi mode settings
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+VI_MODE_SET_CURSOR=true
+MODE_INDICATOR="%F{yellow}+%f"
+
 # Aliases
-alias vim="vim"
 alias top="vtop --theme=wizard"
 # alias ls="colorls --sd"
 # alias ll="colorls -la --sd"
 alias ll="ls -alhG"
 
+# bindkey 'jk' vi-cmd-mode

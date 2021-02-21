@@ -11,19 +11,21 @@ if pgrep postgres >/dev/null 2>&1
 then
   echo "Postgres is running"
 else
-  tmux send-keys "startpost" Enter
+  echo "Starting postgres server ..."
+  tmux send-keys "startpost" Enter >/dev/null 2>&1
+  sleep 2
 fi
 
 # source python virtualenv
-tmux send-keys "cd ~/work/blendopt" Enter
-tmux send-keys "workon blendopt" Enter
+tmux send-keys "cd ~/work/blendopt" Enter >/dev/null 2>&1
+tmux send-keys "workon blendopt; clear" Enter >/dev/null 2>&1
 
 # create panes  run frontend server
 tmux splitw -h
-tmux send-keys "cd ~/work/blendopt/app/client" Enter
+tmux send-keys "cd ~/work/blendopt/app/client" Enter >/dev/null 2>&1
 tmux send-keys "npm run dev" Enter
 
 tmux select-pane -L
 tmux new-window -n "editor"
-tmux send-keys "cd ~/work/blendopt" Enter
+tmux send-keys "cd ~/work/blendopt; clear" Enter >/dev/null 2>&1
 

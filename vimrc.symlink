@@ -491,6 +491,9 @@ nnoremap <leader>a :<C-u>Denite grep:. -no-empty<CR>
 " Search current directory for occurences of word under cursor
 nnoremap <leader>r :<C-u>DeniteCursorWord grep:.<CR>
 
+" Resume previous denite search list
+nnoremap <leader>p :<C-u>Denite -resume<CR>
+
 " ============ coc.nvim key mappings ================
 let g:coc_enable_locationlist = 0
 autocmd User CocLocationsChange CocList --no-quit --normal location
@@ -505,7 +508,7 @@ nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
 
 " Resume previous location list or enable preview toggle
-nnoremap <silent><nowait> <leader>p :<C-u>CocListResume<CR>
+nnoremap <silent><nowait> <leader>gp :<C-u>CocListResume<CR>
 
 " Automatically remove trailing whitespace
 nnoremap <leader>cw :StripWhitespace<CR>
@@ -550,6 +553,11 @@ function! s:VSetSearch(cmdtype)
 endfunction
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>N
 xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>N
+
+" Shortcuts for open-browser-github.vim
+nnoremap <leader>ogt :OpenGithubIssue<Space>
+nnoremap <leader>ogp :OpenGithubPullReq<CR>
+nnoremap <leader>ogf :'<,'>OpenGithubFile<CR>
 
 " ============================================================================ "
 " ===                                 MISC.                                === "

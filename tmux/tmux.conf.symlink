@@ -41,8 +41,8 @@ set -g base-index 1
 # Start pane numbering at 1
 setw -g pane-base-index 2
 
-# Re-draw status window every 5 seconds
-set -g status-interval 5
+# Re-draw status window every 10 seconds
+set -g status-interval 10
 
 # set scrollback history to 10000 (10k)
 set -g history-limit 10000

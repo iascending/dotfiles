@@ -1,0 +1,55 @@
+ServerAliveInterval 60
+IdentitiesOnly yes
+
+Host grootegeluk
+    User bastillions
+    hostname 134.80.171.251
+    PubkeyAuthentication yes
+    IdentityFile ~/.ssh/exxaro.key
+    PasswordAuthentication no
+    StrictHostKeyChecking no
+Host bathurst580
+    User bastillions
+    hostname 135.194.222.23
+    PubkeyAuthentication yes
+    IdentityFile ~/.ssh/bathurst580.key
+    PasswordAuthentication no
+    StrictHostKeyChecking no
+Host bathurst590
+    User bastillions
+    hostname 135.229.238.163
+    PubkeyAuthentication yes
+    IdentityFile ~/.ssh/bathurst580.key
+    PasswordAuthentication no
+    StrictHostKeyChecking no
+Host absgit-codecommit.*.amazonaws.com
+    User APKA3CGMCAHY54JMIJPS
+    IdentityFile ~/.ssh/aws_rsa.pem
+    PasswordAuthentication no
+    StrictHostKeyChecking no
+Host dev1.online.apn.au
+    IdentityFile ~/.ssh/aws_apn_jli.pem
+    PasswordAuthentication no
+    User jli
+    StrictHostKeyChecking no
+Host *.apnarm.net.au
+    IdentityFile ~/.ssh/aws_apn_jli.pem
+    PasswordAuthentication no
+    ProxyCommand ssh jli@dev1.online.apn.au nc -w 120 %h %p
+    User ec2-user
+    StrictHostKeyChecking no
+Host 172.*.*.*
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+    IdentityFile ~/.ssh/aws_apn.pem
+    PasswordAuthentication no
+    ProxyCommand ssh bastiona.apnarm.net.au nc -w 120 %h %p
+    User ec2-user
+Host *.ap-southeast-2.compute.amazonaws.com
+    StrictHostKeyChecking no
+    IdentityFile ~/.ssh/aws_rsa.pem
+    PasswordAuthentication no
+    User ec2-user
+Host *
+    User iascending
+    IdentityFile ~/.ssh/aws_rsa.pem
