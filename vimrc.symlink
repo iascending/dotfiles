@@ -315,7 +315,8 @@ function! AirlineInit()
     call airline#parts#define_raw('colnum', ':%v')
     call airline#parts#define_accent('colnum', 'bold')
     let g:airline_section_b = airline#section#create(['branch'])
-    let g:airline_section_z = airline#section#create(['linenr', 'colnum'])
+    " let g:airline_section_z = airline#section#create(['linenr', 'colnum'])
+    call airline#update_statusline()
 endfunction
 autocmd VimEnter * call AirlineInit()
 
