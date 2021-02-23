@@ -312,8 +312,10 @@ let g:airline_symbols.paste = 'PASTE - '
 function! AirlineInit()
     call airline#parts#define_raw('linenr', '%l')
     call airline#parts#define_accent('linenr', 'bold')
-    let g:airline_section_z = airline#section#create(['%3p%%  ',
-                \ g:airline_symbols.linenr .' ', 'linenr', ':%c'])
+    call airline#parts#define_raw('colnum', ':%v')
+    call airline#parts#define_accent('colnum', 'bold')
+    let g:airline_section_b = airline#section#create(['branch'])
+    let g:airline_section_z = airline#section#create(['linenr', 'colnum'])
 endfunction
 autocmd VimEnter * call AirlineInit()
 
