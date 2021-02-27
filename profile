@@ -29,4 +29,6 @@ export PATH="/Users/liqiang/dotfiles/myscripts:$PATH"
 alias grep="grep -i"
 alias back="source back"
 alias killport="source killport"
-alias glog="git log | vim -R -"
+# alias glog="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all | vim -c 'set ft=git' -c 'StripWhitespace!' -R -"
+alias glog="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all | vim -c 'set ft=git' -c 'StripWhitespace!' -R -"
+

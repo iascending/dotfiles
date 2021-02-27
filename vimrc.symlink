@@ -306,6 +306,8 @@ if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 
+" to fix wrong column number when cursor on special characters
+set laststatus=2
 " Update section z to have percentage, line number and column number
 let g:airline_section_a = airline#section#create(['paste', 'mode'])
 let g:airline_symbols.paste = 'PASTE - '
@@ -669,3 +671,6 @@ nnoremap <silent> <leader>wv :windo wincmd H<CR>
 nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+' : '-') . '=-<cr>:set iskeyword?<cr>'
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
 
+"Graph view of git log
+" command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>
+command -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>

@@ -111,5 +111,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'tyru/open-browser.vim'
 Plug 'tyru/open-browser-github.vim'
 
+" AnsiEsc plugin
+Plug 'powerman/vim-plugin-AnsiEsc'
+
 " Initialize plugin system
 call plug#end()
