@@ -316,17 +316,10 @@ let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty='⚡'
 
-" Update section z to have percentage, line number and column number
 let g:airline_section_a = airline#section#create(['paste', 'mode'])
 function! AirlineInit()
-    " call airline#parts#define_raw('linenr', '%l')
-    " call airline#parts#define_accent('linenr', 'bold')
-    " call airline#parts#define_raw('colnum', ':%4v')
-    " call airline#parts#define_accent('colnum', 'bold')
     let g:airline_section_b = airline#section#create(['branch'])
-    " let g:airline_section_z = airline#section#create(['linenr', 'colnum'])
-    " let g:airline_section_z = airline#section#create(['%4p%%: ', 'linenr', '/%4L', ':%4v '])
-    " call airline#update_statusline()
+    call airline#update_statusline()
 endfunction
 autocmd VimEnter * call AirlineInit()
 
@@ -537,6 +530,7 @@ cmap w!! w !sudo tee %
 
 " vim-fugitive to show commits for every line
 nnoremap <Leader>gb :Gblame<CR>
+nnoremap <Leader>gs :Gstatus<CR>
 
 " Delete current visual selection and dump in black hole buffer before pasting
 " Used when you want to paste over something without it getting copied to
