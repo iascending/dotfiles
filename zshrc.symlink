@@ -1,6 +1,17 @@
 # If you come from bash you might have to change your $PATH.
 source ~/dotfiles/profile
 
+# There was an long time outstanding issue with my tmux-vim-zsh
+# oh-my-zsh setup. The issue was that the column number displayed
+# in vim-airline statusline was incorrect. Sometimes ":" before
+# column number was missing, and sometimes one extra digit was
+# appended to correct column number. This issue could be fixed
+# by changing the line
+# alias tmux=_zsh_tmux_plugin_run
+# in ~/.oh-my-zsh/plugins/tmux/tmux.plugin.zsh
+# into the following line
+# alias tmux=_zsh_tmux_plugin_run -2
+
 # Would you like to use another custom folder than $ZSH/custom?
 ZSH_CUSTOM=${HOME}/dotfiles/custom
 
@@ -161,9 +172,9 @@ VI_MODE_SET_CURSOR=true
 MODE_INDICATOR="%F{yellow}+%f"
 
 # Aliases
-alias top="vtop --theme=wizard"
-# alias ls="colorls --sd"
-# alias ll="colorls -la --sd"
-alias ll="ls -alhG"
+alias top='vtop --theme=wizard'
+# alias ls='colorls --sd'
+# alias ll='colorls -la --sd'
+alias ll='ls -alhG'
 
 # bindkey 'jk' vi-cmd-mode
