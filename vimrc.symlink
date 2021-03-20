@@ -670,6 +670,10 @@ nnoremap <silent> <leader>d :bp\|bd #<CR>
 nnoremap <silent> <leader>wh :windo wincmd K<CR>
 nnoremap <silent> <leader>wv :windo wincmd H<CR>
 
+" config gf command for vue file search
+set includeexpr=substitute(v:fname,'^\@\/','/Users/liqiang/work/blendopt/app/client/src/','')
+set suffixesadd=.js,.vue,.scss
+
 " Toggle - inclusion in keyword
 nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+' : '-') . '=-<cr>:set iskeyword?<cr>'
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
