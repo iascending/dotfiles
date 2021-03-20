@@ -50,6 +50,7 @@ set smartcase
 
 " Automatically re-read file if a change was detected outside of vim
 set autoread
+au CursorHold * checktime
 
 syntax on
 filetype plugin indent on
