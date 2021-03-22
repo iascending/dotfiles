@@ -357,7 +357,7 @@ let g:vim_vue_plugin_load_full_syntax = 1
 
 " config vue comment format for vim-commentary plugin
 function! OnChangeVueSubtype(subtype)
-  " echom 'Subtype is '.a:subtype
+  echom 'Subtype is '.a:subtype
   if a:subtype == 'html'
     setlocal commentstring=<!--%s-->
     setlocal comments=s:<!--,m:\ \ \ \ ,e:-->
@@ -368,7 +368,6 @@ function! OnChangeVueSubtype(subtype)
     setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
   endif
 endfunction
-autocmd CursorMoved *.vue call OnChangeVueSubtype(GetVueSubtype())
 
 " enable indentation line
 let g:indentLine_enabled = 1
