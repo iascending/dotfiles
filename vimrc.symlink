@@ -374,9 +374,6 @@ autocmd CursorMoved *.vue call OnChangeVueSubtype(GetVueSubtype())
 let g:indentLine_enabled = 1
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
-" settings for vimspector
-"let g:vimspector_enable_mappings = 'HUMAN'
-
 "=============================================================================="
 " ===                      CUSTOM COLORSCHEME CHANGES                      === "
 " ============================================================================ "
@@ -574,7 +571,6 @@ nnoremap <leader>ogf :'<,'>OpenGithubFile<CR>
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-
 " Enable spellcheck for markdown files
 autocmd BufRead,BufNewFile *.md setlocal spell
 
@@ -671,7 +667,9 @@ nnoremap <silent> <leader>wh :windo wincmd K<CR>
 nnoremap <silent> <leader>wv :windo wincmd H<CR>
 
 " config gf command for vue file search
-set includeexpr=substitute(v:fname,'^\@\/','/Users/liqiang/work/blendopt/app/client/src/','')
+let proj_client_src = $PROJ_HOME.'/app/client/src/'
+let proj_styles_src = $PROJ_HOME.'/app/client/src/assets/styles/'
+set includeexpr=substitute(substitute(v:fname,'^\@\/',proj_client_src,''),'^\\~styles\/',proj_styles_src,'')
 set suffixesadd=.js,.vue,.scss
 
 " Toggle - inclusion in keyword
