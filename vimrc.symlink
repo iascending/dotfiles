@@ -659,11 +659,15 @@ nnoremap <silent> <leader>w= :wincmd =<CR>
 " open a new vertical split
 nnoremap <silent> <leader>\ :wincmd v<CR>
 " Close a window without resizing
-nnoremap <silent> <leader>d :bp\|bd #<CR>
+nnoremap <silent> <leader>dw :bp\|bd #<CR>
 
 " Switch between horizontal and vertical split windows
 nnoremap <silent> <leader>wh :windo wincmd K<CR>
 nnoremap <silent> <leader>wv :windo wincmd H<CR>
+
+" Dash API docs search shortcuts
+let g:dash_activate = 1
+nmap <silent> <leader>ds <Plug>DashSearch
 
 " config gf command for vue file search
 let proj_client_src = $PROJ_HOME.'/app/client/src/'

@@ -114,5 +114,8 @@ Plug 'tyru/open-browser-github.vim'
 " AnsiEsc plugin
 Plug 'powerman/vim-plugin-AnsiEsc'
 
+" Dash integration
+Plug 'rizzatti/dash.vim'
+
 " Initialize plugin system
 call plug#end()
