@@ -99,7 +99,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " viminspector -- vim debugger
-Plug 'puremourning/vimspector'
+" Plug 'puremourning/vimspector'
 
 " vim easy align
 Plug 'junegunn/vim-easy-align'
@@ -112,7 +112,7 @@ Plug 'tyru/open-browser.vim'
 Plug 'tyru/open-browser-github.vim'
 
 " AnsiEsc plugin
-Plug 'powerman/vim-plugin-AnsiEsc'
+" Plug 'powerman/vim-plugin-AnsiEsc'
 
 " Dash integration
 Plug 'rizzatti/dash.vim'

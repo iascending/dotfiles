@@ -352,8 +352,21 @@ let g:used_javascript_libs = 'underscore,requirejs,chai,jquery'
 " === Signify === "
 let g:signify_sign_delete = '-'
 
-"==== Vue ====
-let g:vim_vue_plugin_load_full_syntax = 1
+"==== vim-vue-plugin ====
+let g:vim_vue_plugin_config = {
+      \'syntax': {
+      \   'template': ['html'],
+      \   'script': ['javascript'],
+      \   'style': ['scss'],
+      \   'i18n': ['json', 'yaml'],
+      \   'route': 'json',
+      \   'docs': 'markdown'
+      \},
+      \'full_syntax': ['scss', 'html'],
+      \'attribute': 1,
+      \'keyword': 1,
+      \'foldexpr': 1,
+      \}
 
 " config vue comment format for vim-commentary plugin
 function! OnChangeVueSubtype(subtype)
@@ -372,6 +385,7 @@ endfunction
 " enable indentation line
 let g:indentLine_enabled = 1
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+nnoremap <silent> <leader>tl :IndentLinesToggle<CR>
 
 "=============================================================================="
 " ===                      CUSTOM COLORSCHEME CHANGES                      === "
@@ -678,6 +692,10 @@ set suffixesadd=.js,.vue,.scss
 " Toggle - inclusion in keyword
 nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+' : '-') . '=-<cr>:set iskeyword?<cr>'
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
+
+" set autoindent for python and javascript
+au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 expandtab autoindent fileformat=unix
+au BufNewFile,BufRead *.js, *.html, *.css set tabstop=2 softtabstop=2 shiftwidth=2 textwidth=120
 
 "Graph view of git log
 " command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>
