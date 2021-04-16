@@ -71,12 +71,6 @@ set hidden
 " Insert spaces when TAB is pressed
 set expandtab
 
-" Change number of spaces that a TAB counts for
-set softtabstop=2
-
-" Indentation with < and > commands
-set shiftwidth=2
-
 " Show a visual vertical line under cursor
 set cursorcolumn
 
@@ -99,10 +93,7 @@ set nofoldenable
 " Set updatetime for vim-signify
 set updatetime=100
 
-" =====================================================================
-"                           PLUGIN SETUP
-" =====================================================================
-
+" --------------- vim plugin setup ---- denite---------------------------------
 " Wrap in try/catch to avoid errors on initial install before plugin is available
 try
 " === Denite setup ==="
@@ -169,7 +160,7 @@ catch
   echo 'Denite not installed. It should work after running :PlugInstall'
 endtry
 
-" === Denite shorcuts === "
+" --------------- vim plugin setup ---- denite keymappings --------------------
 " Define mappings while in 'filter' mode
 "   <C-o>         - Switch to normal mode inside of search results
 "   <Esc>         - Exit denite window in any mode
@@ -195,7 +186,8 @@ function! s:denite_filter_my_settings() abort
   \ denite#do_map('do_action', 'split')
 endfunction
 
-" Define mappings while in denite window
+" --------------- vim plugin setup ---- denite keymappings in default mode ----
+" Define mappings indow
 "   <CR>        - Opens currently selected file
 "   q or <Esc>  - Quit Denite window
 "   d           - Delete currenly selected file
@@ -218,8 +210,6 @@ function! s:denite_my_settings() abort
   \ denite#do_map('do_action', 'preview')
   nnoremap <silent><buffer><expr> i
   \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> <C-o>
-  \ denite#do_map('open_filter_buffer')
   nnoremap <silent><buffer><expr> <C-t>
   \ denite#do_map('do_action', 'tabopen')
   nnoremap <silent><buffer><expr> <C-v>
@@ -228,7 +218,7 @@ function! s:denite_my_settings() abort
   \ denite#do_map('do_action', 'split')
 endfunction
 
-" === Coc.nvim === "
+" --------------- vim plugin setup ---- coc.nvim ------------------------------
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -243,7 +233,7 @@ inoremap <silent><expr> <TAB>
 "Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-" === NeoSnippet === "
+" --------------- vim plugin setup ---- NeoSnippet ----------------------------
 " Map <C-k> as shortcut to activate snippet if available
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -255,7 +245,7 @@ let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
 " Hide conceal markers
 let g:neosnippet#enable_conceal_markers = 0
 
-" ==== NERDTree ====
+" --------------- vim plugin setup ---- NerdTree ------------------------------
 " Show hidden files/directories
 let g:NERDTreeShowHidden = 1
 
@@ -266,8 +256,6 @@ let g:NERDTreeMinimalUI = 1
 let g:NERDTreeWinSize=60
 
 " Custom icons for expandable/expanded directories
-" let g:NERDTreeDirArrowExpandable = '►'
-" let g:NERDTreeDirArrowCollapsible = '▼'
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
@@ -276,6 +264,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 " Hide certain files and directories from NERDTree
 let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
 
+" --------------- vim plugin setup ---- vim airline ---------------------------
  " Wrap in try/catch to avoid errors on initial install before plugin is available
 try
 " === Vim airline ==== "
@@ -334,25 +323,26 @@ catch
   echo 'Airline not installed. It should work after running :PlugInPtall'
 endtry
 
-" === echodoc === "
+" --------------- vim plugin setup ---- echodoc -------------------------------
 " Enable echodoc on startup
 let g:echodoc#enable_at_startup = 1
 
-" === vim-javascript === "
+" --------------- vim plugin setup ---- vim-javascript ------------------------
 " Enable syntax highlighting for JSDoc
 let g:javascript_plugin_jsdoc = 1
 
-" === vim-jsx === "
+"-- ------------- vim plugin setup ---- vim-jsx -------------------------------
 " Highlight jsx syntax even in non .jsx files
 let g:jsx_ext_required = 0
 
-" === javascript-libraries-syntax === "
+" --------------- vim plugin setup ---- javascript-libraries-syntax -----------
 let g:used_javascript_libs = 'underscore,requirejs,chai,jquery'
 
 " === Signify === "
+" --------------- vim plugin setup ---- vim-signify ---------------------------
 let g:signify_sign_delete = '-'
 
-"==== vim-vue-plugin ====
+" --------------- vim plugin setup ---- vim-vue-plugin ------------------------
 let g:vim_vue_plugin_config = {
       \'syntax': {
       \   'template': ['html'],
@@ -382,15 +372,13 @@ function! OnChangeVueSubtype(subtype)
   endif
 endfunction
 
-" enable indentation line
+" --------------- vim plugin setup ---- vim-indentline ------------------------
 let g:indentLine_enabled = 1
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+let g:indentLine_char = '▏'
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 nnoremap <silent> <leader>tl :IndentLinesToggle<CR>
 
-"=============================================================================="
-" ===                      CUSTOM COLORSCHEME CHANGES                      === "
-" ============================================================================ "
-"
+" --------------- vim custom colorscheme setup --------------------------------
 " Add custom highlights in method that is executed every time a colorscheme is sourced
 " See https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f for details
 function! TrailingSpaceHighlights() abort
@@ -460,9 +448,7 @@ catch
   colorscheme slate
 endtry
 
-" ============================================================================ "
-" ===                             KEY MAPPINGS                             === "
-" ============================================================================ "
+" --------------- vim misc keymappings ----------------------------------------
 " Map a ESC key to jk
 inoremap jk <ESC>
 inoremap kj <ESC>
@@ -479,7 +465,6 @@ nnoremap # #N
 nnoremap j gj
 nnoremap k gk
 
-" ============ Search key mappings  =================
 nnoremap / /\v
 vnoremap / /\v
 " Search and replace
@@ -488,14 +473,17 @@ map <leader>s :%s///<left><left>
 "Toggle  highlighted search terms while preserving history
 nnoremap <silent> <leader>/ :set hlsearch!<CR>
 
-" ============ NERDTree key mappings ================
+" --------------- vim plugin setup ---- NerdTree ------------------------------
 " Toggle NERDTree on/off
 nmap <leader>n :NERDTreeToggle<CR>
 
 " Opens current file location in NERDTree
 nmap <leader>f :NERDTreeFind<CR>
 
-" ============ Denite key mappings ==================
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" --------------- vim plugin setup ---- denite keymappings --------------------
 " Browser currently open buffers with (Denite)
 nmap <leader>; :Denite buffer<CR>
 
@@ -511,7 +499,7 @@ nnoremap <leader>r :<C-u>DeniteCursorWord grep:.<CR>
 " Resume previous denite search list
 nnoremap <leader>p :<C-u>Denite -resume<CR>
 
-" ============ coc.nvim key mappings ================
+" --------------- vim plugin setup ---- coc.nvim keymappings ------------------
 let g:coc_enable_locationlist = 0
 autocmd User CocLocationsChange CocList --no-quit --normal location
 
@@ -525,11 +513,13 @@ nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
 
 " Resume previous location list or enable preview toggle
-nnoremap <silent><nowait> <leader>gp :<C-u>CocListResume<CR>
+" nnoremap <silent><nowait> <leader>gp :<C-u>CocListResume<CR>
 
+" --------------- vim plugin setup ---- vim-better-whitespace keymappings -----
 " Automatically remove trailing whitespace
 nnoremap <leader>cw :StripWhitespace<CR>
 
+" --------------- vim plugin setup ---- vim-easymotion ------------------------
 " Easy-motion highlights first word letters bi-directionally
 map <leader>w <Plug>(easymotion-bd-w)
 
@@ -539,30 +529,27 @@ cmap w!! w !sudo tee %
 " Generate jsdoc for function under cursor
 " nmap <leader>jd :JsDoc<CR>
 
+" --------------- vim plugin setup ---- vim-fugitive --------------------------
 " vim-fugitive to show commits for every line
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>gp :Git push<CR>
+nnoremap <Leader>gs :Git<CR>
 
-" Delete current visual selection and dump in black hole buffer before pasting
-" Used when you want to paste over something without it getting copied to
-" Vim's default buffer
-" vnoremap <leader>p "_dP
-
-" ============ Vimux ================================
+" --------------- vim plugin setup ---- vimux ---------------------------------
 " run shell command from within vim
 map <leader>vp :VimuxPromptCommand<CR>
 
 " run last command again
 map <leader>vl :VimuxRunLastCommand<CR>
 
- " vim-easy-align shortcuts
+" --------------- vim plugin setup ---- vim-easy-align keymappings ------------
  " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-" From nelstrom/vim-visual-star-search. It  makes * and # work on visual mode too.
+" --------------- vim plugin setup ---- vim-visual-star-search ----------------
 function! s:VSetSearch(cmdtype)
   let temp = @s
   norm! gv"sy
@@ -572,17 +559,10 @@ endfunction
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>N
 xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>N
 
-" Shortcuts for open-browser-github.vim
+" --------------- vim plugin setup ---- open-browser-github.vim ---------------
 nnoremap <leader>ogt :OpenGithubIssue<Space>
 nnoremap <leader>ogp :OpenGithubPullReq<CR>
 nnoremap <leader>ogf :'<,'>OpenGithubFile<CR>
-
-" ============================================================================ "
-" ===                                 MISC.                                === "
-" ============================================================================ "
-
-" Automaticaly close nvim if NERDTree is only thing left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Enable spellcheck for markdown files
 autocmd BufRead,BufNewFile *.md setlocal spell
@@ -694,8 +674,8 @@ nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
 
 " set autoindent for python and javascript
-au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 expandtab autoindent fileformat=unix
-au BufNewFile,BufRead *.js, *.html, *.css set tabstop=2 softtabstop=2 shiftwidth=2 textwidth=120
+au BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 expandtab autoindent fileformat=unix
+au BufNewFile,BufRead *.js, *.html, *.css, *.vue setlocal tabstop=2 softtabstop=2 shiftwidth=2 textwidth=120
 
 "Graph view of git log
 " command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>
