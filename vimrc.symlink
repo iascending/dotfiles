@@ -90,8 +90,11 @@ set foldlevel=99
 " Set not to fold lines when opening file
 set nofoldenable
 
+" --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
 set updatetime=100
+nnoremap <leader>gd :SignifyHunkDiff<cr>
+nnoremap <leader>gu :SignifyHunkUndo<cr>
 
 " --------------- vim plugin setup ---- denite---------------------------------
 " Wrap in try/catch to avoid errors on initial install before plugin is available
@@ -104,7 +107,7 @@ try
 call denite#custom#var('file/rec', 'command', ['rg', '--files', '--glob', '!.git'])
 
 " Use ripgrep in place of grep
-call denite#custom#var('grep', 'command', ['rg'])
+call denite#custom#var('grep', 'command', ['rg', '--glob', '!.git'])
 
 " Custom options for ripgrep
 "   --vimgrep:  Show results with every match on it's own line
@@ -347,12 +350,13 @@ let g:vim_vue_plugin_config = {
       \'syntax': {
       \   'template': ['html'],
       \   'script': ['javascript'],
-      \   'style': ['scss'],
+      \   'style': ['scss', 'css'],
       \   'i18n': ['json', 'yaml'],
       \   'route': 'json',
       \   'docs': 'markdown'
       \},
       \'full_syntax': ['scss', 'html'],
+      \'initial_indent': ['script.javascript', 'style', 'yaml'],
       \'attribute': 1,
       \'keyword': 1,
       \'foldexpr': 1,
@@ -374,8 +378,8 @@ endfunction
 
 " --------------- vim plugin setup ---- vim-indentline ------------------------
 let g:indentLine_enabled = 1
-let g:indentLine_char = '▏'
-" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" let g:indentLine_char = '▏'
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 nnoremap <silent> <leader>tl :IndentLinesToggle<CR>
 
 " --------------- vim custom colorscheme setup --------------------------------
@@ -504,13 +508,13 @@ let g:coc_enable_locationlist = 0
 autocmd User CocLocationsChange CocList --no-quit --normal location
 
 " Jump to definition of current symbol
-nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> gd <Plug>(coc-definition)
 
 " Jump to references of current symbol
-nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> gr <Plug>(coc-references)
 
 " Jump to implementation of current symbol
-nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> gi <Plug>(coc-implementation)
 
 " Resume previous location list or enable preview toggle
 " nnoremap <silent><nowait> <leader>gp :<C-u>CocListResume<CR>
@@ -563,6 +567,35 @@ xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>N
 nnoremap <leader>ogt :OpenGithubIssue<Space>
 nnoremap <leader>ogp :OpenGithubPullReq<CR>
 nnoremap <leader>ogf :'<,'>OpenGithubFile<CR>
+
+" --------------- vim plugin setup ---- vim-dadbod ----------------------------
+let g:db = 'postgres://paradynuser:paradynuser@127.0.0.1/' . $DB_NAME . '<CR>'
+func! DBExe(...)
+	if !a:0
+		let &operatorfunc = matchstr(expand('<sfile>'), '[^. ]*$')
+		return 'g@'
+	endif
+	let sel_save = &selection
+	let &selection = "inclusive"
+	let reg_save = @@
+	if a:1 == 'char'	" Invoked from Visual mode, use gv command.
+		silent exe 'normal! gvy'
+	elseif a:1 == 'line'
+		silent exe "normal! '[V']y"
+	else
+		silent exe 'normal! `[v`]y'
+	endif
+	execute "DB! " . @@
+	let &selection = sel_save
+	let @@ = reg_save
+endfunc
+xnoremap <expr> <Plug>(DBExe)     DBExe()
+nnoremap <expr> <Plug>(DBExe)     DBExe()
+nnoremap <expr> <Plug>(DBExeLine) DBExe() . '_'
+xmap <leader>db  <Plug>(DBExe)
+nmap <leader>db  <Plug>(DBExe)
+omap <leader>db  <Plug>(DBExe)
+nmap <leader>dbb <Plug>(DBExeLine)
 
 " Enable spellcheck for markdown files
 autocmd BufRead,BufNewFile *.md setlocal spell
@@ -674,8 +707,11 @@ nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
 
 " set autoindent for python and javascript
-au BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=80 expandtab autoindent fileformat=unix
-au BufNewFile,BufRead *.js, *.html, *.css, *.vue setlocal tabstop=2 softtabstop=2 shiftwidth=2 textwidth=120
+set tabstop=4
+set shiftwidth=0    " Use tabstop
+set softtabstop=-1  " Use shiftwidth
+au FileType py setlocal tabstop=4 textwidth=80
+au FileType js,html,css,vue setlocal tabstop=2 textwidth=120
 
 "Graph view of git log
 " command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>

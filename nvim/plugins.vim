@@ -40,7 +40,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Vimux - interact with tmux from within vim
-Plug 'benmills/vimux'
+Plug 'preservim/vimux'
 
 " Denite - Fuzzy finding, buffer management
 Plug 'Shougo/denite.nvim'
@@ -116,6 +116,9 @@ Plug 'tyru/open-browser-github.vim'
 
 " Dash integration
 Plug 'rizzatti/dash.vim'
+
+" vim-dadbod database integration
+Plug 'tpope/vim-dadbod'
 
 " Initialize plugin system
 call plug#end()
