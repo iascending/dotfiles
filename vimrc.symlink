@@ -707,11 +707,9 @@ nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
 
 " set autoindent for python and javascript
-set tabstop=4
-set shiftwidth=0    " Use tabstop
-set softtabstop=-1  " Use shiftwidth
-au FileType py setlocal tabstop=4 textwidth=80
-au FileType js,html,css,vue setlocal tabstop=2 textwidth=120
+let g:pyindent_open_paren = 'shiftwidth()'
+au BufNewFile,BufRead *.js,*.html,*.css,*.scss,*.vue setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab textwidth=120
+au BufNewFile,BufRead *.py setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab textwidth=80
 
 "Graph view of git log
 " command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>

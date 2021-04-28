@@ -120,5 +120,8 @@ Plug 'rizzatti/dash.vim'
 " vim-dadbod database integration
 Plug 'tpope/vim-dadbod'
 
+" vim-matchup
+Plug 'andymass/vim-matchup'
+
 " Initialize plugin system
 call plug#end()
