@@ -145,7 +145,7 @@ let s:denite_options = {'default' : {
 \ 'highlight_window_background': 'Visual',
 \ 'highlight_filter_background': 'DiffAdd',
 \ 'winrow': 1,
-\ 'preview_width': (&columns - 40) * 0.38,
+\ 'preview_width': (&columns - 40) * 0.50,
 \ 'vertical_preview': 1
 \ }}
 
@@ -251,18 +251,36 @@ let g:neosnippet#enable_conceal_markers = 0
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Show hidden files/directories
 let g:NERDTreeShowHidden = 1
-
 " Remove bookmarks and help text from NERDTree
 let g:NERDTreeMinimalUI = 1
-
 " Set NERDTree default window size
 let g:NERDTreeWinSize=60
+" Automaticaly close nvim if NERDTree is only thing left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_unite = 1
+let g:webdevicons_enable_vimfiler = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_ctrlp = 1
+let g:webdevicons_enable_flagship_statusline = 1
+let g:WebDevIconsUnicodeDecorateFileNodes = 1
+let g:WebDevIconsUnicodeGlyphDoubleWidth = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
+let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
+let g:webdevicons_enable_denite = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:DevIconsEnableFolderPatternMatching = 1
+let g:DevIconsEnableFolderExtensionPatternMatching = 1
+let WebDevIconsUnicodeDecorateFolderNodesExactMatches = 1
 " Custom icons for expandable/expanded directories
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
-let g:WebDevIconsUnicodeDecorateFolderNodes = v:true
 
 " Hide certain files and directories from NERDTree
 let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
@@ -346,29 +364,29 @@ let g:used_javascript_libs = 'underscore,requirejs,chai,jquery'
 let g:signify_sign_delete = '-'
 
 " --------------- vim plugin setup ---- vim-vue-plugin ------------------------
+"  this set of config: vim-vue-plugin without vim-context-commentstring
+let b:current_loading_main_syntax = 'vue'
 let g:vim_vue_plugin_config = {
       \'syntax': {
       \   'template': ['html'],
       \   'script': ['javascript'],
-      \   'style': ['scss', 'css'],
-      \   'i18n': ['json', 'yaml'],
-      \   'route': 'json',
-      \   'docs': 'markdown'
+      \   'style': ['css'],
       \},
-      \'full_syntax': ['scss', 'html'],
-      \'initial_indent': ['script.javascript', 'style', 'yaml'],
-      \'attribute': 1,
-      \'keyword': 1,
-      \'foldexpr': 1,
+      \'full_syntax': [],
+      \'initial_indent': ['script', 'style'],
+      \'attribute': 0,
+      \'keyword': 0,
+      \'foldexpr': 0,
+      \'debug': 0,
       \}
 
 " config vue comment format for vim-commentary plugin
-function! OnChangeVueSubtype(subtype)
-  echom 'Subtype is '.a:subtype
-  if a:subtype == 'html'
+function! OnChangeVueSyntax(syntax)
+  echom 'Syntax is '.a:syntax
+  if a:syntax == 'html'
     setlocal commentstring=<!--%s-->
     setlocal comments=s:<!--,m:\ \ \ \ ,e:-->
-  elseif a:subtype =~ 'css'
+  elseif a:syntax =~ 'css'
     setlocal comments=s1:/*,mb:*,ex:*/ commentstring&
   else
     setlocal commentstring=//%s
@@ -516,9 +534,6 @@ nmap <silent> gr <Plug>(coc-references)
 " Jump to implementation of current symbol
 nmap <silent> gi <Plug>(coc-implementation)
 
-" Resume previous location list or enable preview toggle
-" nnoremap <silent><nowait> <leader>gp :<C-u>CocListResume<CR>
-
 " --------------- vim plugin setup ---- vim-better-whitespace keymappings -----
 " Automatically remove trailing whitespace
 nnoremap <leader>cw :StripWhitespace<CR>
@@ -526,12 +541,10 @@ nnoremap <leader>cw :StripWhitespace<CR>
 " --------------- vim plugin setup ---- vim-easymotion ------------------------
 " Easy-motion highlights first word letters bi-directionally
 map <leader>w <Plug>(easymotion-bd-w)
+nmap <leader>w <Plug>(easymotion-overwin-w)
 
 " Allows you to save files you opened without write permissions via sudo
 cmap w!! w !sudo tee %
-
-" Generate jsdoc for function under cursor
-" nmap <leader>jd :JsDoc<CR>
 
 " --------------- vim plugin setup ---- vim-fugitive --------------------------
 " vim-fugitive to show commits for every line
@@ -706,11 +719,46 @@ set suffixesadd=.js,.vue,.scss
 nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+' : '-') . '=-<cr>:set iskeyword?<cr>'
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
 
-" set autoindent for python and javascript
-let g:pyindent_open_paren = 'shiftwidth()'
-au BufNewFile,BufRead *.js,*.html,*.css,*.scss,*.vue setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab textwidth=120
-au BufNewFile,BufRead *.py setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab textwidth=80
+" Toggle - open current buffer in binary mode
+let g:binary_mode=0
+function! ToggleBinaryMode()
+  silent !clear
+  if !g:binary_mode
+    execute "%!xxd"
+  else
+    execute "%!xxd -r"
+  endif
+  let g:binary_mode = !g:binary_mode
+endfunction
+nnoremap <silent> <leader>b :call ToggleBinaryMode()<CR>
 
+" key mappings to replace vim-close behaviors
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap (<CR> (<CR>)<ESC>O
+inoremap [ []<left>
+inoremap [<CR> [<CR>]<ESC>O
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {,<CR> {<CR>},<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+
+let g:coc_global_extensions = ["coc-css",
+            \ "coc-eslint",
+            \ "coc-html",
+            \ "coc-json",
+            \ "coc-tsserver",
+            \ "coc-prettier",
+            \ "coc-python",
+            \ "coc-tslint",
+            \ "coc-ultisnips",
+            \ "coc-tailwindcss",
+            \ "coc-vetur"]
 "Graph view of git log
 " command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>
 command -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
+
+" map <silent> <F4> :syntax sync fromstart<CR>
+imap cll console.log()<Esc>==f(a
+

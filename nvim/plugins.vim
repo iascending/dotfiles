@@ -24,11 +24,18 @@ call plug#begin('~/.vim/plugged')
 " Trailing whitespace highlighting & automatic fixing
 Plug 'ntpeters/vim-better-whitespace'
 
-" auto-close plugin
-Plug 'rstacruz/vim-closer'
+" vim-surround
+Plug 'tpope/vim-surround'
+
+" vim-repeat
+Plug 'tpope/vim-repeat'
+
+" vim-sleuth
+Plug 'tpope/vim-sleuth'
 
 " vim-commentary
 Plug 'tpope/vim-commentary'
+" Plug 'suy/vim-context-commentstring'
 
 " indentation
 Plug 'yggdroot/indentline'
@@ -38,6 +45,7 @@ Plug 'easymotion/vim-easymotion'
 
 " Intellisense Engine
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'sheerun/vim-polyglot'
 
 " Vimux - interact with tmux from within vim
 Plug 'preservim/vimux'
@@ -71,9 +79,9 @@ Plug 'heavenshell/vim-jsdoc'
 
 " Vuejs plugin
 Plug 'leafOfTree/vim-vue-plugin'
+" Plug 'posva/vim-vue'
 
 " === Syntax Highlighting === "
-
 " Syntax highlighting for nginx
 Plug 'chr4/nginx.vim'
 
@@ -81,7 +89,8 @@ Plug 'chr4/nginx.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 
 " Improved syntax highlighting and indentation
-Plug 'othree/yajs.vim'
+" Possiblely slow down vim-vue and vim-vue-plugins
+" Plug 'othree/yajs.vim'
 
 " === UI === "
 " File explorer
@@ -98,9 +107,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-" viminspector -- vim debugger
-" Plug 'puremourning/vimspector'
-
 " vim easy align
 Plug 'junegunn/vim-easy-align'
 
@@ -111,9 +117,6 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'tyru/open-browser.vim'
 Plug 'tyru/open-browser-github.vim'
 
-" AnsiEsc plugin
-" Plug 'powerman/vim-plugin-AnsiEsc'
-
 " Dash integration
 Plug 'rizzatti/dash.vim'
 
@@ -122,6 +125,9 @@ Plug 'tpope/vim-dadbod'
 
 " vim-matchup
 Plug 'andymass/vim-matchup'
+
+" vim-python-pep8-indent
+Plug 'vimjas/vim-python-pep8-indent'
 
 " Initialize plugin system
 call plug#end()
