@@ -1,11 +1,5 @@
 {
   "suggest.maxCompleteItemCount": 20,
-  "eslint.filetypes": [
-    "javascript",
-    "typescript",
-    "typescriptreact",
-    "javascriptreact"
-  ],
   "tsserver.log": "verbose",
   "tsserver.trace.server": "verbose",
   "codeLens.enable": false,
@@ -48,8 +42,9 @@
   "python.pythonPath": "/Users/liqiang/.virtualenvs/blendopt/bin/python3",
   "list.maxPreviewHeight": 30,
   "python.autoComplete.addBrackets": true,
-  "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
   "python.linting.flake8Args": [
     "--max-line-length=80",
     "--ignore=W391"
