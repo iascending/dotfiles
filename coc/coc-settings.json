@@ -39,15 +39,36 @@
   },
   "suggest.echodocSupport": true,
   "prettier.eslintIntegration": true,
+  "python.linting.enabled": true,
+  "python.analysis.autoImportCompletions": true,
   "python.pythonPath": "/Users/liqiang/.virtualenvs/blendopt/bin/python3",
   "list.maxPreviewHeight": 30,
-  "python.autoComplete.addBrackets": true,
   "python.linting.flake8Enabled": true,
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": false,
   "python.linting.flake8Args": [
     "--max-line-length=80",
     "--ignore=W391"
   ],
-  "python.linting.flake8Path": "/Users/liqiang/.virtualenvs/blendopt/bin/flake8"
+  "python.linting.flake8Path": "/Users/liqiang/.virtualenvs/blendopt/bin/flake8",
+  "languageserver": {
+      "sourcery": {
+          "command": "/Users/liqiang/.virtualenvs/blendopt/bin/sourcery",
+          "args": [
+              "lsp"
+          ],
+          "filetypes": [
+              "python"
+          ],
+          "initializationOptions": {
+              "token": "user_QsQbGeeWb9I48TrU2WAIB0lAYyD8NCamSOLiercib_FW8lZeMXZfdeicUlo",
+              "extension_version": "coc.nvim",
+              "editor_version": "vim"
+          },
+          "settings": {
+              "sourcery": {
+                  "metricsEnabled": true
+              }
+          },
+          "trace.server": "verbose"
+      }
+  }
 }

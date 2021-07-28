@@ -95,6 +95,8 @@ set nofoldenable
 set updatetime=100
 nnoremap <leader>gd :SignifyHunkDiff<cr>
 nnoremap <leader>gu :SignifyHunkUndo<cr>
+nmap <leader>gj <plug>(signify-next-hunk)
+nmap <leader>gk <plug>(signify-prev-hunk)
 
 " --------------- vim plugin setup ---- denite---------------------------------
 " Wrap in try/catch to avoid errors on initial install before plugin is available
@@ -232,6 +234,47 @@ inoremap <silent><expr> <TAB>
   \ pumvisible() ? "\<C-n>" :
   \ <SID>check_back_space() ? "\<TAB>" :
   \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Use K to show documentation in preview window.
+nnoremap <silent>dk :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+nnoremap <leader>cl :CocDiagnostics<cr>
+xmap <leader>cf <Plug>(coc-format-selected)
+nmap <leader>cf <Plug>(coc-format-selected)
 
 "Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
@@ -396,7 +439,7 @@ endfunction
 let g:indentLine_enabled = 1
 " let g:indentLine_char = '▏'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-nnoremap <silent> <leader>tl :IndentLinesToggle<CR>
+nnoremap <silent> <leader>ti :IndentLinesToggle<CR>
 
 " --------------- vim custom colorscheme setup --------------------------------
 " Add custom highlights in method that is executed every time a colorscheme is sourced
@@ -533,12 +576,16 @@ autocmd User CocLocationsChange CocList --no-quit --normal location
 
 " Jump to definition of current symbol
 nmap <silent> gd <Plug>(coc-definition)
-
+" nmap <silent> gd :call CocAction('jumpDefinition')
 " Jump to references of current symbol
 nmap <silent> gr <Plug>(coc-references)
-
 " Jump to implementation of current symbol
 nmap <silent> gi <Plug>(coc-implementation)
+" Auto fix current
+nmap <silent> qf <Plug>(coc-fix-current)
+nmap <silent> ac <Plug>(coc-codeaction)
+" xmap <silent> acs <Plug>(coc-codeaction-selected)
+" nmap <silent> acs <Plug>(coc-codeaction-selected)
 
 " --------------- vim plugin setup ---- vim-better-whitespace keymappings -----
 " Automatically remove trailing whitespace
@@ -555,8 +602,18 @@ cmap w!! w !sudo tee %
 " --------------- vim plugin setup ---- vim-fugitive --------------------------
 " vim-fugitive to show commits for every line
 nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>bb :GBrowse<CR>
+vnoremap <Leader>bb :GBrowse<CR>
 nnoremap <Leader>gp :Git push<CR>
 nnoremap <Leader>gs :Git<CR>
+
+" --------------- vim plugin setup ---- vim-test --------------------------
+" let test#python#runner = '/Users/liqiang/.virtualenvs/blendopt/bin/pytest'
+nmap <leader>tc :TestNearest<CR>
+nmap <leader>tf :TestFile<CR>
+nmap <leader>ts :TestSuite<CR>
+nmap <leader>tp :TestLast<CR>
+nmap <leader>tv :TestVisit<CR>
 
 " --------------- vim plugin setup ---- vimux ---------------------------------
 " run shell command from within vim
@@ -619,14 +676,19 @@ nmap <leader>dbb <Plug>(DBExeLine)
 " Enable spellcheck for markdown files
 autocmd BufRead,BufNewFile *.md setlocal spell
 
-" Set backups
-if has('persistent_undo')
-  set undofile
-  set undolevels=3000
-  set undoreload=10000
-endif
-set backupdir=~/.local/share/vim/backup " Don't put backups in current dir
-set backup
+" " Set backups
+" if has('persistent_undo')
+"   set undofile
+"   set undolevels=3000
+"   set undoreload=10000
+" endif
+" set backupdir=~/.local/share/vim/backup " Don't put backups in current dir
+" set backup
+" set noswapfile
+
+" Disable backups and swap files
+set nobackup
+set nowritebackup
 set noswapfile
 
 " Reload icons after init source
@@ -742,6 +804,7 @@ nnoremap <silent> <leader>b :call ToggleBinaryMode()<CR>
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
+inoremap (; ();<left>
 inoremap (<CR> (<CR>)<ESC>O
 inoremap [ []<left>
 inoremap [<CR> [<CR>]<ESC>O
@@ -749,6 +812,7 @@ inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {,<CR> {<CR>},<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
+imap cll console.log(;<Esc>==f(a
 
 let g:coc_global_extensions = ["coc-css",
             \ "coc-eslint",
@@ -756,15 +820,15 @@ let g:coc_global_extensions = ["coc-css",
             \ "coc-json",
             \ "coc-tsserver",
             \ "coc-prettier",
-            \ "coc-python",
+            \ "coc-pyright",
             \ "coc-tslint",
             \ "coc-ultisnips",
             \ "coc-tailwindcss",
             \ "coc-vetur"]
+autocmd FileType python let b:coc_root_patterns = ['.git', '.env']
+
 "Graph view of git log
 " command! -buffer -nargs=* Glg <mods> Git --paginate log --oneline --decorate --graph --all <args>
-command -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
-
+" command -nargs=* Glg Git! log --graph --pretty=format:'\%h - (\%ad)\%d \%s <\%an>' --abbrev-commit --date=local <args>
 " map <silent> <F4> :syntax sync fromstart<CR>
-imap cll console.log()<Esc>==f(a
 

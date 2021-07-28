@@ -66,6 +66,7 @@ Plug 'Shougo/echodoc.vim'
 " Enable git changes to be shown in sign column
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 
 " === Javascript Plugins === "
 " Typescript syntax highlighting
@@ -128,6 +129,9 @@ Plug 'andymass/vim-matchup'
 
 " vim-python-pep8-indent
 Plug 'vimjas/vim-python-pep8-indent'
+
+" vim-test
+Plug 'vim-test/vim-test'
 
 " Initialize plugin system
 call plug#end()
