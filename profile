@@ -31,7 +31,6 @@ export PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig"
 export PATH="/Users/liqiang/dotfiles/myscripts:$PATH"
 
 # set frequently used aliases
-alias grep="grep -i"
 alias realpath='ll -d "$PWD"/*'
 alias cf="ls -l | grep -c '^-'"
 alias back="source back"

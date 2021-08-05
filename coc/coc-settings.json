@@ -2,6 +2,8 @@
   "suggest.maxCompleteItemCount": 20,
   "tsserver.log": "verbose",
   "tsserver.trace.server": "verbose",
+  "vetur.trace.server": "verbose",
+  "vetur.languageFeatures.codeActions": true,
   "codeLens.enable": false,
   "diagnostic.infoSign": "ღ",
   "diagnostic.hintSign": "ஐ",
@@ -38,6 +40,8 @@
     "default": "\uf29c"
   },
   "suggest.echodocSupport": true,
+  "python.formatting.provider": "autopep8",
+  "python.formatting.autopep8Path": "/Library/Frameworks/Python.framework/Versions/3.8/bin/autopep8",
   "prettier.eslintIntegration": true,
   "python.linting.enabled": true,
   "python.analysis.autoImportCompletions": true,
