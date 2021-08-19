@@ -172,10 +172,9 @@ VI_MODE_SET_CURSOR=true
 MODE_INDICATOR="%F{yellow}+%f"
 
 # web search blendopt setup
-ZSH_WEB_SEARCH_ENGINES=(ogm "https://github.com/paradynsystems/blendopt/issues?q=is%3Aopen+assignee%3A%40")
-alias ogm='web_search ogm me'
+ZSH_WEB_SEARCH_ENGINES=(ghm "https://github.com/paradynsystems/blendopt/issues?q=is%3Aopen+assignee%3A%40")
+alias ghm='web_search ghm me'
 
-# Aliases
 alias top='vtop --theme=wizard'
 # alias ls='colorls --sd'
 # alias ll='colorls -la --sd'

@@ -49,6 +49,9 @@ set wildmenu
 set ignorecase
 
 set showmatch
+
+" Set shell used to execute commands
+set shell=${SHELL}
 set shellcmdflag=-c
 
 " if the search string has an upper case letter in it, the search will be case sensitive
@@ -86,23 +89,12 @@ set cursorline
 " Show window title
 set title
 
-" Set shell used to execute commands
-set shell=${SHELL}
-
 " Set foldmethold and level for folding
 set foldmethod=indent
 set foldlevel=99
 
 " Set not to fold lines when opening file
 set nofoldenable
-
-" --------------- vim plugin setup ---- vim-signify ---------------------------
-" Set updatetime for vim-signify
-set updatetime=100
-nnoremap <leader>gd :SignifyHunkDiff<cr>
-nnoremap <leader>gu :SignifyHunkUndo<cr>
-nmap >c <plug>(signify-next-hunk)
-nmap <c <plug>(signify-prev-hunk)
 
 " --------------- vim plugin setup ---- denite---------------------------------
 " Wrap in try/catch to avoid errors on initial install before plugin is available
@@ -252,16 +244,19 @@ endif
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+" Use :CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <leader>rn <Plug>(coc-rename)
+xmap <leader>cf <Plug>(coc-format-selected)
+nmap <leader>cf <Plug>(coc-format-selected)
+nnoremap <leader>cl :CocDiagnostics<cr>
 
-" Use K to show documentation in preview window.
-nnoremap <silent>dk :call <SID>show_documentation()<CR>
-
+" Use dc to show documentation in preview window.
+nnoremap <silent>dc :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -271,16 +266,8 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-
 " Highlight the symbol and its references when holding the cursor.
 autocmd myvimrc CursorHold * silent call CocActionAsync('highlight')
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-nnoremap <leader>cl :CocDiagnostics<cr>
-xmap <leader>cf <Plug>(coc-format-selected)
-nmap <leader>cf <Plug>(coc-format-selected)
 
 "Close preview window when completion is done.
 autocmd! myvimrc CompleteDone * if pumvisible() == 0 | pclose | endif
@@ -606,26 +593,42 @@ cmap w!! w !sudo tee %
 
 " --------------- vim plugin setup ---- vim-fugitive --------------------------
 " vim-fugitive to show commits for every line
-nnoremap <Leader>gb :Git blame<CR>
-nnoremap <Leader>bb :GBrowse<CR>
-vnoremap <Leader>bb :GBrowse<CR>
-nnoremap <Leader>gp :Git push<CR>
-nnoremap <Leader>gs :Git<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gB :GBrowse<CR>
+vnoremap <leader>gB :GBrowse<CR>
+nnoremap <leader>gp :Git push<CR>
+nnoremap <leader>gs :Git<CR>
+
+" --------------- vim plugin setup ---- open-browser-github.vim ---------------
+nnoremap ght :OpenGithubIssue<Space>
+nnoremap ghp :OpenGithubPullReq<CR>
+nnoremap ghf :'<,'>OpenGithubFile<CR>
+nnoremap ghm :VimuxPromptCommand<CR>ghm<CR>
+
+" --------------- vim plugin setup ---- vim-signify ---------------------------
+" Set updatetime for vim-signify
+set updatetime=100
+nnoremap <leader>gd :SignifyHunkDiff<cr>
+nnoremap <leader>gu :SignifyHunkUndo<cr>
+nmap >c <plug>(signify-next-hunk)
+nmap <c <plug>(signify-prev-hunk)
 
 " --------------- vim plugin setup ---- vim-test --------------------------
-" let test#python#runner = '/Users/liqiang/.virtualenvs/blendopt/bin/pytest'
+let test#strategy = 'vimux'
+let test#python#runner = 'pytest'
+let test#project_root = '/Users/liqiang/work/blendopt/app/testing'
 nmap <leader>tc :TestNearest<CR>
 nmap <leader>tf :TestFile<CR>
-nmap <leader>ts :TestSuite<CR>
 nmap <leader>tp :TestLast<CR>
 nmap <leader>tv :TestVisit<CR>
 
 " --------------- vim plugin setup ---- vimux ---------------------------------
 " run shell command from within vim
 map <leader>vp :VimuxPromptCommand<CR>
-
 " run last command again
 map <leader>vl :VimuxRunLastCommand<CR>
+" close vimux pane opened
+map <leader>vq :VimuxCloseRunner<CR>
 
 " --------------- vim plugin setup ---- vim-easy-align keymappings ------------
  " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -643,11 +646,6 @@ function! s:VSetSearch(cmdtype)
 endfunction
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>N
 xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>N
-
-" --------------- vim plugin setup ---- open-browser-github.vim ---------------
-nnoremap <leader>ogt :OpenGithubIssue<Space>
-nnoremap <leader>ogp :OpenGithubPullReq<CR>
-nnoremap <leader>ogf :'<,'>OpenGithubFile<CR>
 
 " --------------- vim plugin setup ---- vim-dadbod ----------------------------
 let g:db = 'postgres://paradynuser:paradynuser@127.0.0.1/' . $DB_NAME . '<CR>'
