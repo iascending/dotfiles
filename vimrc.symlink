@@ -36,6 +36,7 @@ set splitright
 
 " Don't dispay mode in command line (airilne already shows it)
 set noshowmode
+set nocompatible
 
 " Don't give completion message
 set shortmess+=c
@@ -380,6 +381,7 @@ endtry
 
 " --------------- vim plugin setup ---- echodoc -------------------------------
 " Enable echodoc on startup
+set cmdheight=2
 let g:echodoc#enable_at_startup = 1
 
 " --------------- vim plugin setup ---- vim-javascript ------------------------
@@ -477,6 +479,7 @@ function! s:custom_jason_colors()
   " Highlight git diff added and removed lines
   hi DiffAdded   term=reverse ctermfg=0 ctermbg=121 guifg=bg guibg=#99c794
   hi DiffRemoved term=NONE ctermfg=253 ctermbg=203 guifg=#d8dee9 guibg=#ec5f67
+  hi CocUnusedHighlight ctermfg=242 guifg=#777777
 endfunction
 
 autocmd! myvimrc ColorScheme * call TrailingSpaceHighlights()
@@ -587,6 +590,7 @@ nnoremap <leader>cw :StripWhitespace<CR>
 " Easy-motion highlights first word letters bi-directionally
 map <leader>w <Plug>(easymotion-bd-w)
 nmap <leader>w <Plug>(easymotion-overwin-w)
+nmap s <Plug>(easymotion-overwin-f2)
 
 " Allows you to save files you opened without write permissions via sudo
 cmap w!! w !sudo tee %
@@ -595,9 +599,35 @@ cmap w!! w !sudo tee %
 " vim-fugitive to show commits for every line
 nnoremap <leader>gb :Git blame<CR>
 nnoremap <leader>gB :GBrowse<CR>
+nnoremap <leader>gd :Gvdiffsplit!<CR>
 vnoremap <leader>gB :GBrowse<CR>
 nnoremap <leader>gp :Git push<CR>
 nnoremap <leader>gs :Git<CR>
+nnoremap <leader>gl :0Gclog<CR>
+vnoremap <leader>gl :Gclog<CR>
+
+" get up to parent dirctory when buffer is a blob or tree
+" autocmd User fugitive
+"   \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+"   \   nnoremap <buffer>.. :edit %:h<CR> |
+"   \ endif
+
+" close off vim diff splits
+if !exists(":Gdiffoff")
+  command Gdiffoff diffoff | q | Gedit
+endif
+nnoremap <silent> <leader>dq :Gdiffoff<CR>
+
+" Toggle quickfix list open and close
+function! ToggleQuickFix()
+    if empty(filter(getwininfo(), 'v:val.quickfix'))
+        copen
+    else
+        cclose
+    endif
+endfunction
+nnoremap <silent> <leader>qq :call ToggleQuickFix()<CR>
+autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser-github.vim ---------------
 nnoremap ght :OpenGithubIssue<Space>
@@ -608,7 +638,7 @@ nnoremap ghm :VimuxPromptCommand<CR>ghm<CR>
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
 set updatetime=100
-nnoremap <leader>gd :SignifyHunkDiff<cr>
+" nnoremap <leader>gd :SignifyHunkDiff<cr>
 nnoremap <leader>gu :SignifyHunkUndo<cr>
 nmap >c <plug>(signify-next-hunk)
 nmap <c <plug>(signify-prev-hunk)
@@ -696,7 +726,7 @@ nnoremap <leader>sv :source ~/.vimrc<CR>:echo "Reloaded .vimrc"<CR>
 nnoremap <silent> <leader>tn :set relativenumber!<CR>
 
 " cd into current buffer's directory
-nnoremap <leader>cd :cd %:p:h<CR>
+nnoremap <leader>cd :lcd %:p:h<CR>
 
 " Copy the full path of current buffer
 nnoremap <silent> <leader>cp :let @+=expand('%:p')<CR>
@@ -868,3 +898,13 @@ nnoremap zz :w<CR>
 inoremap zz <Esc>:w<CR>l
 vnoremap zz <Esc>:w<CR>
 
+" find out highlight group under cursor
+function! SynStack ()
+    for i1 in synstack(line("."), col("."))
+        let i2 = synIDtrans(i1)
+        let n1 = synIDattr(i1, "name")
+        let n2 = synIDattr(i2, "name")
+        echo n1 "->" n2
+    endfor
+endfunction
+map gm :call SynStack()<CR>

@@ -48,11 +48,17 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+# zsh-vi-mode plugin configuration
+ZVM_VI_ESCAPE_BINDKEY=jk
+ZVM_VI_OPPEND_ESCAPE_BINDKEY=kj
+ZVM_CURSOR_STYLE_ENABLED=false
+ZVM_INIT_MODE=sourcing
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(osx tmux postgres zsh-autosuggestions web-search)
+plugins=(osx tmux postgres zsh-autosuggestions web-search zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -77,18 +83,18 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #   - Exit if there's no match (--exit-0)
 fo() {
   local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  IFS=$'\n' files=($(fzf-tmux -w 100% -h 100% --query="$1" --multi --select-1 --exit-0 --preview "bat --style=numbers --color=always --line-range :500 {}"))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
 # fd - cd to selected directory
-#fd() {
-  #DIR=`find * -maxdepth 0 -type d -print 2> /dev/null | fzf-tmux` && cd "$DIR"
-#}
 fd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) && cd "$dir"
+  DIR=`find * -maxdepth 0 -type d -print 2> /dev/null | fzf-tmux` && cd "$DIR"
 }
+# fd() {
+#   local dir
+#   dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) && cd "$dir"
+# }
 
 # fda - including hidden directories
 fda() {
@@ -136,9 +142,8 @@ ftmk() {
 frg() {
   local file
   local line
-
-  read -r file line <<<"$(rg --hidden --no-heading --line-number $@ 2>/dev/null | fzf -0 -1 | awk -F: '{print $1, $2}')"
-
+  # read -r file line <<<"$(rg --hidden --no-heading --line-number $@ 2>/dev/null | fzf -0 -1 | awk -F: '{print $1, $2}')"
+  read -r file line <<<"$(rg --hidden --no-heading --line-number $@ 2>/dev/null | fzf -0 -1 --preview='bat --style=numbers --color=always --line-range :500 {}')"
   if [[ -n $file ]]
   then
      vim $file +$line
@@ -158,6 +163,53 @@ fkill() {
     then
         echo $pid | xargs kill -${1:-9}
     fi
+}
+
+fstash() {
+  while out=$(git stash list "$@" |
+              fzf --ansi --no-sort --reverse --print-query --query="$query"      \
+                  --expect=ctrl-m,ctrl-b,ctrl-p,ctrl-d \
+                  --preview-window=bottom:60% \
+                  --preview 'git show --patience --stat --pretty=oneline --color=always \
+                                  -p $(echo {} | cut -d: -f1 | less -R)' \
+              );
+  do
+      # Tokenize selection by newline
+      selection=("${(f)out}")
+
+      # Keep the query accross fzf calls
+      query="$selection[1]"
+
+      # Represents the stash, e.g. stash{1}
+      reflog_selector=$(echo "$selection[3]" | cut -d ':' -f 1)
+
+      case "$selection[2]" in
+          # enter or ctrl-m is just a diff
+          ctrl-m)
+              git diff --patience --color=always -p "$reflog_selector" | less -R
+              ;;
+          # ctrl-b checks out the stash as a branch and removes the stash
+          ctrl-b)
+              sha=$(echo "$selection[3]" | grep -o '[a-f0-9]\{7\}')
+              git stash branch "stash-$sha" "$reflog_selector"
+              break
+              ;;
+          #pop current stash into current branch
+          ctrl-p)
+              git stash pop "$reflog_selector"
+              break
+              ;;
+          # del will drop the stash
+          ctrl-d)
+              git stash drop "$reflog_selector"
+              ;;
+      esac
+  done
+}
+
+vf() {
+  # note that you need to extract the absolute path in order to get this to work
+  ls -d ~/.virtualenvs/*/ | fzf | while read file; do source $file/bin/activate; done
 }
 
 # Set default editor to nvim
@@ -184,3 +236,5 @@ alias grep='grep -i --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.to
 
 alias we='curl wttr.in/Knoxfield\?3nqF'
 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

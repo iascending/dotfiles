@@ -1,6 +1,6 @@
-" ============================================================================ "
-" ===                               PLUGINS                                === "
-" ============================================================================ "
+" ============================================================================
+"                             PLUGINS
+" ============================================================================
 
 " check whether vim-plug is installed and install it if necessary
 let plugpath = expand('<sfile>:p:h'). '/autoload/plug.vim'
@@ -20,9 +20,14 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-" === Editing Plugins === "
 " Trailing whitespace highlighting & automatic fixing
 Plug 'ntpeters/vim-better-whitespace'
+
+" vim-exchange
+Plug 'tommcdo/vim-exchange'
+
+" vim-unimpaired
+Plug 'tpope/vim-unimpaired'
 
 " vim-surround
 Plug 'tpope/vim-surround'
@@ -67,10 +72,6 @@ Plug 'Shougo/echodoc.vim'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-
-" === Javascript Plugins === "
-" Typescript syntax highlighting
-Plug 'HerringtonDarkholme/yats.vim'
 
 " ReactJS JSX syntax highlighting
 Plug 'mxw/vim-jsx'
@@ -132,6 +133,7 @@ Plug 'vimjas/vim-python-pep8-indent'
 
 " vim-test
 Plug 'vim-test/vim-test'
+Plug 'sheerun/vim-polyglot'
 
 " Initialize plugin system
 call plug#end()

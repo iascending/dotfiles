@@ -110,3 +110,5 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 
 alias ll="ls -alhG"
 
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
