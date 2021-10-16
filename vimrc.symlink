@@ -706,9 +706,6 @@ nmap <leader>db  <Plug>(DBExe)
 omap <leader>db  <Plug>(DBExe)
 nmap <leader>dbb <Plug>(DBExeLine)
 
-" Enable spellcheck for markdown files
-autocmd myvimrc BufRead,BufNewFile *.md setlocal spell
-
 " Disable backups and swap files
 set nobackup
 set nowritebackup
@@ -908,3 +905,10 @@ function! SynStack ()
     endfor
 endfunction
 map gm :call SynStack()<CR>
+
+" --------------- vim plugin setup ---- vim-markdown --------------------------
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'sql']
+let g:sql_type_default = 'pgsql'
+" let b:sql_type_override='pgsql' | setfiletype sql
+let g:sql_type_override='pgsql'
+

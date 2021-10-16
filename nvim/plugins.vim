@@ -48,6 +48,9 @@ Plug 'yggdroot/indentline'
 " Improved motion in Vim
 Plug 'easymotion/vim-easymotion'
 
+" targets.vim
+Plug 'wellle/targets.vim'
+
 " Intellisense Engine
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'sheerun/vim-polyglot'
@@ -133,7 +136,12 @@ Plug 'vimjas/vim-python-pep8-indent'
 
 " vim-test
 Plug 'vim-test/vim-test'
-Plug 'sheerun/vim-polyglot'
+
+" vim-markdown
+Plug 'tpope/vim-markdown'
+
+" pgsql.vim
+Plug 'lifepillar/pgsql.vim'
 
 " Initialize plugin system
 call plug#end()

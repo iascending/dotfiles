@@ -1,14 +1,16 @@
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 export PATH="/Users/liqiang/work/blendopt:${PATH}"
-export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
-export VIRTUALENVWRAPPER_PYTHON=/Library/Frameworks/Python.framework/Versions/3.8/bin/python3
-export VIRTUALENVWRAPPER_VIRTUALENV=/Library/Frameworks/Python.framework/Versions/3.8/bin/virtualenv
-source /Library/Frameworks/Python.framework/Versions/3.8/bin/virtualenvwrapper.sh
+# export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
+# export VIRTUALENVWRAPPER_PYTHON=/Library/Frameworks/Python.framework/Versions/3.8/bin/python3
+# export VIRTUALENVWRAPPER_VIRTUALENV=/Library/Frameworks/Python.framework/Versions/3.8/bin/virtualenv
+# source /Library/Frameworks/Python.framework/Versions/3.8/bin/virtualenvwrapper.sh
 
 # export PATH="/usr/local/Cellar/python@3.9/3.9.1_3/Frameworks/Python.framework/Versions/Current/bin:${PATH}"
 # export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 # export VIRTUALENVWRAPPER_VIRTUALENV=/usr/local/lib/python3.9/site-packages/virtualenv
 # source /usr/local/bin/virtualenvwrapper.sh
+
+source /usr/local/bin/virtualenvwrapper.sh
 
 export PROJ_HOME=/Users/liqiang/work/blendopt
 source ~/.blendopt_envs

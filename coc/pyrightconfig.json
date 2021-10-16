@@ -1,0 +1,12 @@
+{
+    "executionEnvironments": [
+        {"root": "app"}
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/__pycache__"
+    ],
+    "reportOptionalMemberAccess": false,
+    "reportGeneralTypeIssues": false,
+    "reportOptionalSubscript": false
+}
