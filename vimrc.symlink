@@ -226,7 +226,7 @@ endfunction
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 inoremap <silent><expr> <TAB>
@@ -257,7 +257,6 @@ nmap <leader>cf <Plug>(coc-format-selected)
 nnoremap <leader>cl :CocDiagnostics<cr>
 
 " Use dc to show documentation in preview window.
-nnoremap <silent>dc :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -267,6 +266,8 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
+autocmd myvimrc FileType javascript,vue,python nnoremap <buffer><nowait><silent>K :call <SID>show_documentation()<CR>
+
 " Highlight the symbol and its references when holding the cursor.
 autocmd myvimrc CursorHold * silent call CocActionAsync('highlight')
 
@@ -395,7 +396,6 @@ let g:jsx_ext_required = 0
 " --------------- vim plugin setup ---- javascript-libraries-syntax -----------
 let g:used_javascript_libs = 'underscore,requirejs,chai,jquery'
 
-" === Signify === "
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 let g:signify_sign_delete = '-'
 
@@ -530,7 +530,7 @@ vnoremap / /\v
 map <leader>s :%s///<left><left>
 
 "Toggle  highlighted search terms while preserving history
-nnoremap <silent> <leader>/ :set hlsearch!<CR>
+nnoremap <silent><leader>/ :set hlsearch!<CR>
 
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Toggle NERDTree on/off
@@ -606,12 +606,6 @@ nnoremap <leader>gs :Git<CR>
 nnoremap <leader>gl :0Gclog<CR>
 vnoremap <leader>gl :Gclog<CR>
 
-" get up to parent dirctory when buffer is a blob or tree
-" autocmd User fugitive
-"   \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-"   \   nnoremap <buffer>.. :edit %:h<CR> |
-"   \ endif
-
 " close off vim diff splits
 if !exists(":Gdiffoff")
   command Gdiffoff diffoff | q | Gedit
@@ -638,10 +632,9 @@ nnoremap ghm :VimuxPromptCommand<CR>ghm<CR>
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
 set updatetime=100
-" nnoremap <leader>gd :SignifyHunkDiff<cr>
 nnoremap <leader>gu :SignifyHunkUndo<cr>
-nmap >c <plug>(signify-next-hunk)
-nmap <c <plug>(signify-prev-hunk)
+nmap ]c <plug>(signify-next-hunk)
+nmap [c <plug>(signify-prev-hunk)
 
 " --------------- vim plugin setup ---- vim-test --------------------------
 let test#strategy = 'vimux'
@@ -663,7 +656,6 @@ map <leader>vq :VimuxCloseRunner<CR>
 " --------------- vim plugin setup ---- vim-easy-align keymappings ------------
  " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
@@ -834,17 +826,18 @@ inoremap {,<CR> {<CR>},<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
 imap cll console.log(;<Esc>==f(a
 
-let g:coc_global_extensions = ["coc-css",
-  \ "coc-eslint",
+let g:coc_global_extensions = [
   \ "coc-html",
-  \ "coc-json",
+  \ "coc-css",
   \ "coc-tsserver",
-  \ "coc-prettier",
-  \ "coc-pyright",
-  \ "coc-tslint",
+  \ "coc-json",
+  \ "coc-snippets",
   \ "coc-ultisnips",
-  \ "coc-tailwindcss",
-  \ "coc-vetur"]
+  \ "coc-highlight",
+  \ "coc-pyright",
+  \ "coc-vetur",
+  \ "coc-prettier"]
+
 autocmd myvimrc FileType python let b:coc_root_patterns = ['.git', '.env']
 
 " highlight the part of line longer than 80 characters
@@ -897,18 +890,17 @@ vnoremap zz <Esc>:w<CR>
 
 " find out highlight group under cursor
 function! SynStack ()
-    for i1 in synstack(line("."), col("."))
-        let i2 = synIDtrans(i1)
-        let n1 = synIDattr(i1, "name")
-        let n2 = synIDattr(i2, "name")
-        echo n1 "->" n2
-    endfor
+  for i1 in synstack(line("."), col("."))
+    let i2 = synIDtrans(i1)
+    let n1 = synIDattr(i1, "name")
+    let n2 = synIDattr(i2, "name")
+    echo n1 "->" n2
+  endfor
 endfunction
 map gm :call SynStack()<CR>
 
 " --------------- vim plugin setup ---- vim-markdown --------------------------
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'sql']
 let g:sql_type_default = 'pgsql'
-" let b:sql_type_override='pgsql' | setfiletype sql
 let g:sql_type_override='pgsql'
 
