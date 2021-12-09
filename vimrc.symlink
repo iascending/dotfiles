@@ -223,6 +223,18 @@ function! s:denite_my_settings() abort
 endfunction
 
 " --------------- vim plugin setup ---- coc.nvim ------------------------------
+"  disable coc.nvim for git buffer, which causes 'git log | vim -R -' slow
+let g:no_coc_file_types = ['git']
+function! s:disable_coc_for_type()
+  if index(g:no_coc_file_types, &filetype) != -1
+    let b:coc_enabled = 0
+  endif
+endfunction
+augroup CocGroup
+  autocmd!
+  autocmd BufNew,BufEnter * call s:disable_coc_for_type()
+augroup end
+
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -249,12 +261,12 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use :CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <leader>rn <Plug>(coc-rename)
-xmap <leader>cf <Plug>(coc-format-selected)
-nmap <leader>cf <Plug>(coc-format-selected)
-nnoremap <leader>cl :CocDiagnostics<cr>
+nmap <nowait><silent>[g <Plug>(coc-diagnostic-prev)
+nmap <nowait><silent>]g <Plug>(coc-diagnostic-next)
+nmap <nowait><silent>rn <Plug>(coc-rename)
+xmap <nowait><silent>cf <Plug>(coc-format-selected)
+nmap <nowait><silent>cf <Plug>(coc-format-selected)
+nnoremap <nowait><silent>cl :CocDiagnostics<cr>
 
 " Use dc to show documentation in preview window.
 function! s:show_documentation()
@@ -571,14 +583,14 @@ let g:coc_enable_locationlist = 0
 autocmd myvimrc User CocLocationsChange CocList --no-quit --normal location
 
 " Jump to definition of current symbol
-nmap <silent> gd <Plug>(coc-definition)
+nmap <nowait><silent>gd <Plug>(coc-definition)
 " Jump to references of current symbol
-nmap <silent> gr <Plug>(coc-references)
+nmap <nowait><silent>gr <Plug>(coc-references)
 " Jump to implementation of current symbol
-nmap <silent> gi <Plug>(coc-implementation)
+nmap <nowait><silent>gi <Plug>(coc-implementation)
 " Auto fix current
-nmap <silent> qf <Plug>(coc-fix-current)
-nmap <silent> ac <Plug>(coc-codeaction)
+nmap <nowait><silent>qf <Plug>(coc-fix-current)
+nmap <nowait><silent>ac <Plug>(coc-codeaction)
 " xmap <silent> acs <Plug>(coc-codeaction-selected)
 " nmap <silent> acs <Plug>(coc-codeaction-selected)
 
@@ -588,7 +600,6 @@ nnoremap <leader>cw :StripWhitespace<CR>
 
 " --------------- vim plugin setup ---- vim-easymotion ------------------------
 " Easy-motion highlights first word letters bi-directionally
-map <leader>w <Plug>(easymotion-bd-w)
 nmap <leader>w <Plug>(easymotion-overwin-w)
 nmap s <Plug>(easymotion-overwin-f2)
 
@@ -597,20 +608,29 @@ cmap w!! w !sudo tee %
 
 " --------------- vim plugin setup ---- vim-fugitive --------------------------
 " vim-fugitive to show commits for every line
-nnoremap <leader>gb :Git blame<CR>
-nnoremap <leader>gB :GBrowse<CR>
-nnoremap <leader>gd :Gvdiffsplit!<CR>
-vnoremap <leader>gB :GBrowse<CR>
-nnoremap <leader>gp :Git push<CR>
-nnoremap <leader>gs :Git<CR>
-nnoremap <leader>gl :0Gclog<CR>
-vnoremap <leader>gl :Gclog<CR>
+nnoremap <nowait><silent>gb :Git blame<CR>
+nnoremap <nowait><silent>gB :GBrowse<CR>
+vnoremap <nowait><silent>gB :GBrowse<CR>
+nnoremap <nowait><silent><leader>gp :Git push<CR>
+nnoremap <nowait><silent>gs :Git<CR>
+nnoremap <nowait><silent>gl :0Gclog<CR>
+vnoremap <nowait><silent>gl :Gclog<CR>
+nnoremap <nowait><silent>df :Gvdiffsplit!<CR>
 
-" close off vim diff splits
-if !exists(":Gdiffoff")
-  command Gdiffoff diffoff | q | Gedit
-endif
-nnoremap <silent> <leader>dq :Gdiffoff<CR>
+" Close any corresponding diff buffer
+function! MyCloseDiff()
+  if (winnr('$') < 3)
+    return
+  endif
+
+  if (bufname(winbufnr(1)) !~ '^fugitive:' || bufname(winbufnr(2)) !~ '^fugitive:')
+    echom "Not in diff view."
+    return
+  endif
+
+  exe 'bdelete' winbufnr(1)
+endfunction
+nnoremap <nowait><silent>qd :call MyCloseDiff()<CR>
 
 " Toggle quickfix list open and close
 function! ToggleQuickFix()
@@ -620,7 +640,7 @@ function! ToggleQuickFix()
         cclose
     endif
 endfunction
-nnoremap <silent> <leader>qq :call ToggleQuickFix()<CR>
+nnoremap <nowait><silent>qq :call ToggleQuickFix()<CR>
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser-github.vim ---------------
@@ -632,7 +652,8 @@ nnoremap ghm :VimuxPromptCommand<CR>ghm<CR>
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
 set updatetime=100
-nnoremap <leader>gu :SignifyHunkUndo<cr>
+nnoremap <nowait><silent>hu :SignifyHunkUndo<CR>
+nnoremap <nowait><silent>hd :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
 nmap [c <plug>(signify-prev-hunk)
 
@@ -787,7 +808,7 @@ nnoremap <silent> <leader>wv :windo wincmd H<CR>
 
 " Dash API docs search shortcuts
 let g:dash_activate = 1
-nmap <silent> <leader>ds <Plug>DashSearch
+nmap <silent><leader>ds <Plug>DashSearch
 
 " config gf command for vue file search
 let proj_client_src = $PROJ_HOME.'/app/client/src/'

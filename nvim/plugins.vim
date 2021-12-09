@@ -128,9 +128,6 @@ Plug 'rizzatti/dash.vim'
 " vim-dadbod database integration
 Plug 'tpope/vim-dadbod'
 
-" vim-matchup
-Plug 'andymass/vim-matchup'
-
 " vim-python-pep8-indent
 Plug 'vimjas/vim-python-pep8-indent'
 

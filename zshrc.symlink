@@ -213,7 +213,8 @@ vf() {
 }
 
 # Set default editor to nvim
-export EDITOR='vim'
+export VISUAL=vim
+export EDITOR=$VISUAL
 
 # Enabled true color support for terminals
 export NVIM_TUI_ENABLE_TRUE_COLOR=1
