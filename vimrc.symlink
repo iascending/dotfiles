@@ -116,6 +116,7 @@ call denite#custom#var('grep', 'command', ['rg', '--glob', '!.git'])
 "   --heading:  Show the file name above clusters of matches from each file
 "   --S:        Search case insensitively if the pattern is all lowercase
 call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S', '-F'])
+" call denite#custom#var('grep', 'default_opts', ['--hidden', '--vimgrep', '--heading', '-S'])
 
 " Recommended defaults for ripgrep via Denite docs
 call denite#custom#var('grep', 'recursive_opts', [])
@@ -538,8 +539,6 @@ nnoremap k gk
 
 nnoremap / /\v
 vnoremap / /\v
-" Search and replace
-map <leader>s :%s///<left><left>
 
 "Toggle  highlighted search terms while preserving history
 nnoremap <silent><leader>/ :set hlsearch!<CR>
@@ -601,7 +600,7 @@ nnoremap <leader>cw :StripWhitespace<CR>
 " --------------- vim plugin setup ---- vim-easymotion ------------------------
 " Easy-motion highlights first word letters bi-directionally
 nmap <leader>w <Plug>(easymotion-overwin-w)
-nmap s <Plug>(easymotion-overwin-f2)
+nmap f <Plug>(easymotion-overwin-f2)
 
 " Allows you to save files you opened without write permissions via sudo
 cmap w!! w !sudo tee %
@@ -613,47 +612,58 @@ nnoremap <nowait><silent>gB :GBrowse<CR>
 vnoremap <nowait><silent>gB :GBrowse<CR>
 nnoremap <nowait><silent><leader>gp :Git push<CR>
 nnoremap <nowait><silent>gs :Git<CR>
+" 1) gl to view git change history of current buffer
+" 2) ]q or [q navigate between commits in quickfix list
+" 3) dd to enter diff mode, and dq to quit diff mode
+" 4) ]q or [q navigate to a different commit
+" 5) dd to enter diff mode, and dq to quit diff mode
+" 6) qq to toggle open or close quickfix list
+" 7) Gedit to bring back to working version
 nnoremap <nowait><silent>gl :0Gclog<CR>
 vnoremap <nowait><silent>gl :Gclog<CR>
-nnoremap <nowait><silent>df :Gvdiffsplit!<CR>
+" " Close any corresponding diff buffer
+" function! MyCloseDiff()
+"   if (winnr('$') < 2)
+"     return
+"   endif
 
-" Close any corresponding diff buffer
-function! MyCloseDiff()
-  if (winnr('$') < 3)
-    return
-  endif
-
-  if (bufname(winbufnr(1)) !~ '^fugitive:' || bufname(winbufnr(2)) !~ '^fugitive:')
-    echom "Not in diff view."
-    return
-  endif
-
-  exe 'bdelete' winbufnr(1)
-endfunction
-nnoremap <nowait><silent>qd :call MyCloseDiff()<CR>
+"   if (bufname(winbufnr(1)) !~ '^fugitive:' || bufname(winbufnr(2)) !~ '^fugitive:')
+"     echom "Not in diff view."
+"     return
+"   endif
+"   exe 'bdelete' winbufnr(1)
+"   exe 'Gedit'
+" endfunction
+" nnoremap <nowait><silent>qd :call MyCloseDiff()<CR>
 
 " Toggle quickfix list open and close
 function! ToggleQuickFix()
-    if empty(filter(getwininfo(), 'v:val.quickfix'))
-        copen
-    else
-        cclose
-    endif
+  if empty(filter(getwininfo(), 'v:val.quickfix'))
+    copen 25
+  else
+    cclose
+  endif
 endfunction
 nnoremap <nowait><silent>qq :call ToggleQuickFix()<CR>
 autocmd BufReadPost fugitive://* set bufhidden=delete
+
+" --------------- vim plugin setup ---- open-browser.vim  ---------------------
+let g:netrw_nogx = 1
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
 
 " --------------- vim plugin setup ---- open-browser-github.vim ---------------
 nnoremap ght :OpenGithubIssue<Space>
 nnoremap ghp :OpenGithubPullReq<CR>
 nnoremap ghf :'<,'>OpenGithubFile<CR>
 nnoremap ghm :VimuxPromptCommand<CR>ghm<CR>
+nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
 set updatetime=100
-nnoremap <nowait><silent>hu :SignifyHunkUndo<CR>
-nnoremap <nowait><silent>hd :SignifyHunkDiff<CR>
+nnoremap <nowait><silent><leader>hu :SignifyHunkUndo<CR>
+nnoremap <nowait><silent><leader>hd :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
 nmap [c <plug>(signify-prev-hunk)
 
@@ -754,25 +764,25 @@ nnoremap <silent> <home>l :TmuxNavigateRight<cr>
 
 " Switch between windows and panes
 " Wrap window move cursor
-function! s:GotoNextWindow( direction, count )
-  let l:prevWinNr = winnr()
-  execute a:count . 'wincmd' a:direction
-  return winnr() != l:prevWinNr
-endfunction
+" function! s:GotoNextWindow( direction, count )
+"   let l:prevWinNr = winnr()
+"   execute a:count . 'wincmd' a:direction
+"   return winnr() != l:prevWinNr
+" endfunction
 
-function! s:JumpWithWrap( direction, opposite )
-  if ! s:GotoNextWindow(a:direction, v:count1)
-    call s:GotoNextWindow(a:opposite, 999)
-  endif
-endfunction
-nnoremap <silent> <leader>h :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
-nnoremap <silent> <leader>j :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
-nnoremap <silent> <leader>k :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
-nnoremap <silent> <leader>l :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
-nnoremap <silent> <leader><Left> :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
-nnoremap <silent> <leader><Down> :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
-nnoremap <silent> <leader><Up> :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
-nnoremap <silent> <leader><Right> :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
+" function! s:JumpWithWrap( direction, opposite )
+"   if ! s:GotoNextWindow(a:direction, v:count1)
+"     call s:GotoNextWindow(a:opposite, 999)
+"   endif
+" endfunction
+" nnoremap <silent> <leader>h :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
+" nnoremap <silent> <leader>j :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
+" nnoremap <silent> <leader>k :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
+" nnoremap <silent> <leader>l :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
+" nnoremap <silent> <leader><Left> :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
+" nnoremap <silent> <leader><Down> :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
+" nnoremap <silent> <leader><Up> :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
+" nnoremap <silent> <leader><Right> :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
 
 " toggle window size
 function! ToggleZoom(zoom)
@@ -811,9 +821,12 @@ let g:dash_activate = 1
 nmap <silent><leader>ds <Plug>DashSearch
 
 " config gf command for vue file search
-let proj_client_src = $PROJ_HOME.'/app/client/src/'
-let proj_styles_src = $PROJ_HOME.'/app/client/src/assets/styles/'
-set includeexpr=substitute(substitute(v:fname,'^\@\/',proj_client_src,''),'^\\~styles\/',proj_styles_src,'')
+" let proj_client_src = $PROJ_HOME.'/app/client/src/'
+" let proj_styles_src = $PROJ_HOME.'/app/client/src/assets/styles/'
+let proj_client_src = 'app/client/src/'
+let proj_styles_src = 'app/client/src/assets/styles/'
+set isfname+=@-@
+set includeexpr=substitute(substitute(v:fname,'^@\/',proj_client_src,''),'^\\~styles\/',proj_styles_src,'')
 set suffixesadd=.js,.vue,.scss
 
 " Toggle - inclusion in keyword
@@ -918,10 +931,20 @@ function! SynStack ()
     echo n1 "->" n2
   endfor
 endfunction
-map gm :call SynStack()<CR>
+map gmm :call SynStack()<CR>
 
 " --------------- vim plugin setup ---- vim-markdown --------------------------
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'sql']
 let g:sql_type_default = 'pgsql'
 let g:sql_type_override='pgsql'
+
+" Search and replace
+" map <leader>s :%s///<left><left>
+" search word under cursor, search string in .py, .js .vue files
+command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
+command! -nargs=1 Ggjv silent Ggrep! <args> *.js *.vue | cw | redraw!
+command! -nargs=1 Ggpy silent Ggrep! <args> -- "*.py" | cw | redraw!
+nnoremap ss :Ggrw <cword><CR>
+nnoremap sp :Ggpy<space>
+nnoremap sv :Ggjv<space>
 

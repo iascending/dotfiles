@@ -58,7 +58,7 @@ ZVM_INIT_MODE=sourcing
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(osx tmux postgres zsh-autosuggestions web-search zsh-vi-mode)
+plugins=(macos tmux postgres zsh-autosuggestions web-search zsh-vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -239,3 +239,4 @@ alias we='curl wttr.in/Knoxfield\?3nqF'
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
