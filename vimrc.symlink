@@ -447,7 +447,7 @@ endfunction
 let g:indentLine_enabled = 1
 " let g:indentLine_char = '▏'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-nnoremap <silent> <leader>ti :IndentLinesToggle<CR>
+nnoremap <nowait><silent>yoi :IndentLinesToggle<CR>
 
 " --------------- vim custom colorscheme setup --------------------------------
 " Add custom highlights in method that is executed every time a colorscheme is sourced
@@ -540,15 +540,9 @@ nnoremap k gk
 nnoremap / /\v
 vnoremap / /\v
 
-"Toggle  highlighted search terms while preserving history
-nnoremap <silent><leader>/ :set hlsearch!<CR>
-
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Toggle NERDTree on/off
-nmap <leader>n :NERDTreeToggle<CR>
-
-" Move focus back to NERDTree
-nmap <leader>m :NERDTreeFocus<CR>
+nmap <nowait><silent>yon :NERDTreeToggle<CR>
 
 " Opens current file location in NERDTree
 nmap <leader>f :NERDTreeFind<CR>
@@ -599,28 +593,36 @@ nnoremap <leader>cw :StripWhitespace<CR>
 
 " --------------- vim plugin setup ---- vim-easymotion ------------------------
 " Easy-motion highlights first word letters bi-directionally
-nmap <leader>w <Plug>(easymotion-overwin-w)
+" nmap <leader>w <Plug>(easymotion-overwin-w)
 nmap f <Plug>(easymotion-overwin-f2)
 
-" Allows you to save files you opened without write permissions via sudo
-cmap w!! w !sudo tee %
-
 " --------------- vim plugin setup ---- vim-fugitive --------------------------
-" vim-fugitive to show commits for every line
+" :Gedit :0                    # to open index version of current file
+" :Gedit another_branch_name:% # read current file of another branch
+" :Ggrep "findme" branch_name  # search word on a branch
+" :Ggrep "findme" commit_hash  # search word on a commit
+" :Gclog --grep=findme --      # commit messages contains word
+" :Gclog -S "findme" --           # commits add or remove a word
 nnoremap <nowait><silent>gb :Git blame<CR>
 nnoremap <nowait><silent>gB :GBrowse<CR>
 vnoremap <nowait><silent>gB :GBrowse<CR>
-nnoremap <nowait><silent><leader>gp :Git push<CR>
+nnoremap <nowait><silent>gp :Git push<CR>
+" 1) gs enter fugitive git status buffer
+" 2) C-n or C-p to navigate between file names
+" 3) f followed by to characters to go to any place
+" 4) <CR> on a file name, then :Gdiff go to diff mode
+" 5) diffget, diffput, diffupdate
 nnoremap <nowait><silent>gs :Git<CR>
 " 1) gl to view git change history of current buffer
 " 2) ]q or [q navigate between commits in quickfix list
 " 3) dd to enter diff mode, and dq to quit diff mode
 " 4) ]q or [q navigate to a different commit
 " 5) dd to enter diff mode, and dq to quit diff mode
-" 6) qq to toggle open or close quickfix list
+" 6) yoq to toggle open or close quickfix list
 " 7) Gedit to bring back to working version
 nnoremap <nowait><silent>gl :0Gclog<CR>
 vnoremap <nowait><silent>gl :Gclog<CR>
+
 " " Close any corresponding diff buffer
 " function! MyCloseDiff()
 "   if (winnr('$') < 2)
@@ -644,7 +646,7 @@ function! ToggleQuickFix()
     cclose
   endif
 endfunction
-nnoremap <nowait><silent>qq :call ToggleQuickFix()<CR>
+nnoremap <nowait><silent>yoq :call ToggleQuickFix()<CR>
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
@@ -662,8 +664,8 @@ nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
 set updatetime=100
-nnoremap <nowait><silent><leader>hu :SignifyHunkUndo<CR>
-nnoremap <nowait><silent><leader>hd :SignifyHunkDiff<CR>
+nnoremap <nowait><silent>du :SignifyHunkUndo<CR>
+nnoremap <nowait><silent>ds :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
 nmap [c <plug>(signify-prev-hunk)
 
@@ -676,7 +678,8 @@ nmap <leader>tf :TestFile<CR>
 nmap <leader>tp :TestLast<CR>
 nmap <leader>tv :TestVisit<CR>
 
-" --------------- vim plugin setup ---- vimux ---------------------------------
+" --------------- vim plugin setup ---- vimux
+"  ---------------------------------
 " run shell command from within vim
 map <leader>vp :VimuxPromptCommand<CR>
 " run last command again
@@ -742,9 +745,6 @@ endif
 " Source vimrc
 nnoremap <leader>sv :source ~/.vimrc<CR>:echo "Reloaded .vimrc"<CR>
 
-" Toggle line number display
-nnoremap <silent> <leader>tn :set relativenumber!<CR>
-
 " cd into current buffer's directory
 nnoremap <leader>cd :lcd %:p:h<CR>
 
@@ -762,28 +762,6 @@ nnoremap <silent> <home>j :TmuxNavigateDown<cr>
 nnoremap <silent> <home>k :TmuxNavigateUp<cr>
 nnoremap <silent> <home>l :TmuxNavigateRight<cr>
 
-" Switch between windows and panes
-" Wrap window move cursor
-" function! s:GotoNextWindow( direction, count )
-"   let l:prevWinNr = winnr()
-"   execute a:count . 'wincmd' a:direction
-"   return winnr() != l:prevWinNr
-" endfunction
-
-" function! s:JumpWithWrap( direction, opposite )
-"   if ! s:GotoNextWindow(a:direction, v:count1)
-"     call s:GotoNextWindow(a:opposite, 999)
-"   endif
-" endfunction
-" nnoremap <silent> <leader>h :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
-" nnoremap <silent> <leader>j :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
-" nnoremap <silent> <leader>k :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
-" nnoremap <silent> <leader>l :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
-" nnoremap <silent> <leader><Left> :<C-u>call <SID>JumpWithWrap('h', 'l')<CR>
-" nnoremap <silent> <leader><Down> :<C-u>call <SID>JumpWithWrap('j', 'k')<CR>
-" nnoremap <silent> <leader><Up> :<C-u>call <SID>JumpWithWrap('k', 'j')<CR>
-" nnoremap <silent> <leader><Right> :<C-u>call <SID>JumpWithWrap('l', 'h')<CR>
-
 " toggle window size
 function! ToggleZoom(zoom)
   if exists("t:restore_zoom") && (a:zoom == v:true || t:restore_zoom.win != winnr())
@@ -797,21 +775,14 @@ endfunction
 augroup restorezoom
   autocmd WinEnter * silent! :call ToggleZoom(v:false)
 augroup END
-nnoremap <silent> <Leader>g :call ToggleZoom(v:true)<CR>
+nnoremap <silent><leader>g :call ToggleZoom(v:true)<CR>
 
 " close all windows except current one
 nnoremap <silent> <leader>wo :wincmd o<CR>
 " close current window
 nnoremap <silent> <leader>wc :wincmd c<CR>
-" swap 2 splits
-nnoremap <silent> <leader>wr :wincmd r<CR>
 " normalize split size
 nnoremap <silent> <leader>w= :wincmd =<CR>
-" open a new vertical split
-nnoremap <silent> <leader>\ :wincmd v<CR>
-" Close a window without resizing
-nnoremap <silent> <leader>dw :bp\|bd #<CR>
-
 " Switch between horizontal and vertical split windows
 nnoremap <silent> <leader>wh :windo wincmd K<CR>
 nnoremap <silent> <leader>wv :windo wincmd H<CR>
@@ -948,3 +919,17 @@ nnoremap ss :Ggrw <cword><CR>
 nnoremap sp :Ggpy<space>
 nnoremap sv :Ggjv<space>
 
+" --------------- vim-unimpaired shortcuts --------------------------
+" [b ]b # :bprevious :bnext
+" [q ]q # :cprevious :cnext
+" [n ]n # navigate between conflict marker
+" [e ]e # move current line up or down
+" =p =P # paste after/before the line, reindent
+" <p <P # paste after/before the line, decrease indent
+" >p >P # paste after/before the line, increase indent
+" yoh   # toggle highlight
+" yor   # toggle relative line number
+" yoi   # toggle indent lines
+" yon   # toggle NerdTree
+" yoq   # toggle open close quickfix list
+" yow   # toggle line wrap
