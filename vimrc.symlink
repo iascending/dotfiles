@@ -46,17 +46,13 @@ set incsearch
 
 set wildmenu
 
-" ignore case when searching
 set ignorecase
-
 set showmatch
+set smartcase
 
 " Set shell used to execute commands
 set shell=${SHELL}
 set shellcmdflag=-c
-
-" if the search string has an upper case letter in it, the search will be case sensitive
-set smartcase
 
 " Automatically re-read file if a change was detected outside of vim
 set autoread
@@ -680,7 +676,7 @@ nmap <leader>tf :TestFile<CR>
 nmap <leader>tp :TestLast<CR>
 nmap <leader>tv :TestVisit<CR>
 
-" --------------- vim plugin setup ---- vimux
+" --------------- vim plugin setup ---- vimux --------------------------------
 "  ---------------------------------
 " run shell command from within vim
 map <leader>vp :VimuxPromptCommand<CR>
@@ -690,9 +686,14 @@ map <leader>vl :VimuxRunLastCommand<CR>
 map <leader>vq :VimuxCloseRunner<CR>
 
 " --------------- vim plugin setup ---- vim-easy-align keymappings ------------
- " Start interactive EasyAlign in visual mode (e.g. vipga)
+" vipga=               # visual select inner paragraph and align around
+" gaip=                # align around for inner paragraph
+" -=                   # align around last occurence
+" 2=                   # align around 2nd occurence
+" *=                   # align around every occurence
+" <enter>              # left/right/center alignment modes
+" gaip<enter><enter>*= # center align around every occurences
 xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
 " --------------- vim plugin setup ---- vim-visual-star-search ----------------
@@ -935,3 +936,8 @@ nnoremap sv :Ggjv<space>
 " yon   # toggle NerdTree
 " yoq   # toggle open close quickfix list
 " yow   # toggle line wrap
+
+" --------------- vim-exchange shortcuts --------------------------
+"  cxiw . # exchange 2 words
+"  X      # exchange for visual mode
+"  cxc    # clear pending exchange
