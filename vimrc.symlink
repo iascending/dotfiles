@@ -67,7 +67,6 @@ filetype plugin indent on
 
 " Enable line numbers
 set number
-set relativenumber
 
 " Yank and paste with system clipboard
 set clipboard=unnamed
@@ -269,7 +268,7 @@ xmap <nowait><silent>cf <Plug>(coc-format-selected)
 nmap <nowait><silent>cf <Plug>(coc-format-selected)
 nnoremap <nowait><silent>cl :CocDiagnostics<cr>
 
-" Use dc to show documentation in preview window.
+" Use K to show documentation in preview window.
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -606,18 +605,21 @@ nmap f <Plug>(easymotion-overwin-f2)
 nnoremap <nowait><silent>gb :Git blame<CR>
 nnoremap <nowait><silent>gB :GBrowse<CR>
 vnoremap <nowait><silent>gB :GBrowse<CR>
-nnoremap <nowait><silent>gp :Git push<CR>
+nnoremap <nowait><silent><leader>gp :Git push<CR>
 " 1) gs enter fugitive git status buffer
 " 2) C-n or C-p to navigate between file names
 " 3) f followed by to characters to go to any place
-" 4) <CR> on a file name, then :Gdiff go to diff mode
-" 5) diffget, diffput, diffupdate
+" 4) <CR> on a file nama to open that file
+" 5) dd/dv on a file name to enter diff mode
+" 6) diffget, diffput, diffupdate
+" 7) dq to quit diff mode(focus in status split)
+" 8) gq to quit status window
 nnoremap <nowait><silent>gs :Git<CR>
 " 1) gl to view git change history of current buffer
 " 2) ]q or [q navigate between commits in quickfix list
 " 3) dd to enter diff mode, and dq to quit diff mode
 " 4) ]q or [q navigate to a different commit
-" 5) dd to enter diff mode, and dq to quit diff mode
+" 5) dd/dv to enter diff mode, and dq to quit diff mode
 " 6) yoq to toggle open or close quickfix list
 " 7) Gedit to bring back to working version
 nnoremap <nowait><silent>gl :0Gclog<CR>
@@ -665,7 +667,7 @@ nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 " Set updatetime for vim-signify
 set updatetime=100
 nnoremap <nowait><silent>du :SignifyHunkUndo<CR>
-nnoremap <nowait><silent>ds :SignifyHunkDiff<CR>
+nnoremap <nowait><silent>dc :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
 nmap [c <plug>(signify-prev-hunk)
 
