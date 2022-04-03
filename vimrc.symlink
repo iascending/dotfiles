@@ -63,6 +63,7 @@ filetype plugin indent on
 
 " Enable line numbers
 set number
+set relativenumber
 
 " Yank and paste with system clipboard
 set clipboard=unnamed
@@ -503,7 +504,7 @@ augroup END
 " Change highlight group of preview window when open
 function! Handle_Win_Enter()
   if &previewwindow
-"    setlocal winhighlight=Normal:MarkdownError
+    setlocal winhighlight=Normal:MarkdownError
   endif
 endfunction
 
@@ -908,16 +909,18 @@ endfunction
 map gmm :call SynStack()<CR>
 
 " --------------- vim plugin setup ---- vim-markdown --------------------------
-let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'sql']
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'sql', 'javascript']
 let g:sql_type_default = 'pgsql'
 let g:sql_type_override='pgsql'
+let vim_markdown_preview_github=1
+let vim_markdown_preview_hotkey='<C-m>'
 
 " Search and replace
 " map <leader>s :%s///<left><left>
 " search word under cursor, search string in .py, .js .vue files
 command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
-command! -nargs=1 Ggjv silent Ggrep! <args> *.js *.vue | cw | redraw!
-command! -nargs=1 Ggpy silent Ggrep! <args> -- "*.py" | cw | redraw!
+command! -nargs=1 Ggjv silent Ggrep! "<args>" *.js *.vue | cw | redraw!
+command! -nargs=1 Ggpy silent Ggrep! "<args>" -- "*.py" | cw | redraw!
 nnoremap ss :Ggrw <cword><CR>
 nnoremap sp :Ggpy<space>
 nnoremap sv :Ggjv<space>

@@ -136,6 +136,7 @@ Plug 'vim-test/vim-test'
 
 " vim-markdown
 Plug 'tpope/vim-markdown'
+Plug 'JamshedVesuna/vim-markdown-preview'
 
 " pgsql.vim
 Plug 'lifepillar/pgsql.vim'
