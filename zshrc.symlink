@@ -83,9 +83,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #   - Bypass fuzzy finder if there's only one match (--select-1)
 #   - Exit if there's no match (--exit-0)
 fo() {
-  local files
-  IFS=$'\n' files=($(fzf-tmux -w 100% -h 100% --query="$1" --multi --select-1 --exit-0 --preview "bat --style=numbers --color=always --line-range :500 {}"))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+  local FILES
+  IFS=$'\n' FILES=($(fzf-tmux -w 100% -h 100% --query="$1" --multi --select-1 --exit-0 --preview "bat --style=numbers --color=always --line-range :500 {}"))
+  [[ -n "$FILES" ]] && ${EDITOR:-vim} "${FILES[@]}"
 }
 
 # fd - cd to selected directory
@@ -97,10 +97,16 @@ fd() {
 #   dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) && cd "$dir"
 # }
 
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  local FILE
+  FILE="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" | fzf-tmux -w 100% -h 100% +m --preview="bat --style=numbers --color=always --line-range :500 {}")" && echo "opening $FILE" && vim "$FILE" || return 1;
+}
+
 # fda - including hidden directories
 fda() {
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+  local DIR
+  DIR=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$DIR"
 }
 
 # fh [FUZZY PATTERN] - Search in command history
