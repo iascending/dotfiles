@@ -919,11 +919,13 @@ let vim_markdown_preview_hotkey='<C-m>'
 " map <leader>s :%s///<left><left>
 " search word under cursor, search string in .py, .js .vue files
 command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
-command! -nargs=1 Ggjv silent Ggrep! "<args>" *.js *.vue | cw | redraw!
-command! -nargs=1 Ggpy silent Ggrep! "<args>" -- "*.py" | cw | redraw!
+command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
+command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
+command! -nargs=1 Gg silent Ggrep! -E "<args>" -- *.py *.js *.vue | cw | redraw!
 nnoremap ss :Ggrw <cword><CR>
 nnoremap sp :Ggpy<space>
 nnoremap sv :Ggjv<space>
+nnoremap sa :Gg<space>
 
 " --------------- vim-unimpaired shortcuts --------------------------
 " [b ]b # :bprevious :bnext
