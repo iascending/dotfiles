@@ -100,7 +100,7 @@ fd() {
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
   local FILE
-  FILE="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" | fzf-tmux -w 100% -h 100% +m --preview="bat --style=numbers --color=always --line-range :500 {}")" && echo "opening $FILE" && ${EDITOR:-vim} "$FILE" || return 1;
+  FILE="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" | fzf-tmux -w 100% -h 100% +m --preview="bat --style=numbers --color=always --line-range :500 {}")" && echo "opening $FILE" && vim "$FILE" || return 1;
 }
 
 # fda - including hidden directories
@@ -231,6 +231,7 @@ alias ll='ls -alhG'
 alias grep='grep -i --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
 
 alias we='curl wttr.in/Knoxfield\?3nqF'
+
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
