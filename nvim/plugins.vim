@@ -63,9 +63,7 @@ Plug 'Shougo/denite.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 
-" Snippet support
-Plug 'Shougo/neosnippet'
-Plug 'Shougo/neosnippet-snippets'
+Plug 'honza/vim-snippets'
 
 " Print function signatures in echo area
 Plug 'Shougo/echodoc.vim'

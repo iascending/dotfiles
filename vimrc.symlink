@@ -1,6 +1,8 @@
 scriptencoding utf-8
 source ~/dotfiles/nvim/plugins.vim
 
+let g:coc_config_home = '~/dotfiles'
+
 augroup myvimrc
   autocmd!
 augroup END
@@ -299,6 +301,9 @@ let g:neosnippet#enable_conceal_markers = 0
 
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Show hidden files/directories
+" ? toggle nerdtree help
+" u move root up a dir
+" C change root to current dir
 let g:NERDTreeShowHidden = 1
 " Remove bookmarks and help text from NERDTree
 let g:NERDTreeMinimalUI = 1
@@ -843,7 +848,6 @@ let g:coc_global_extensions = [
   \ "coc-tsserver",
   \ "coc-json",
   \ "coc-snippets",
-  \ "coc-ultisnips",
   \ "coc-highlight",
   \ "coc-pyright",
   \ "coc-vetur",
@@ -948,3 +952,10 @@ nnoremap sa :Gg<space>
 "  cxiw . # exchange 2 words
 "  X      # exchange for visual mode
 "  cxc    # clear pending exchange
+
+function SetConfType()
+  if !empty(matchstr(getline('1'), '^#\s.*'))
+    set filetype=dosini
+  endif
+endfunction
+autocmd myvimrc BufEnter *.txt call SetConfType()

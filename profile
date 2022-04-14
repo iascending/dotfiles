@@ -1,5 +1,4 @@
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
-export PATH="/Users/liqiang/work/blendopt:${PATH}"
 # export PATH="/Library/Frameworks/Python.framework/Versions/3.8/bin:${PATH}"
 # export VIRTUALENVWRAPPER_PYTHON=/Library/Frameworks/Python.framework/Versions/3.8/bin/python3
 # export VIRTUALENVWRAPPER_VIRTUALENV=/Library/Frameworks/Python.framework/Versions/3.8/bin/virtualenv
@@ -12,9 +11,12 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3
 
 source /usr/local/bin/virtualenvwrapper.sh
 
+export PATH="/Users/liqiang/work/blendopt:${PATH}"
 export PROJ_HOME=/Users/liqiang/work/blendopt
 source ~/.blendopt_envs
+export PATH="/Users/liqiang/dotfiles/myscripts:$PATH"
 
+# Environment variables for NEWS APN
 # export APN_HOME=/Users/liqiang/work/finda
 # export POSTGRESQL_PORT=5432
 # export NUTCRAKER_LOCATION=localhost:11212
@@ -30,11 +32,12 @@ export LDFLAGS="-L/usr/local/opt/krb5/lib"
 export CPPFLAGS="-I/usr/local/opt/krb5/include"
 export PKG_CONFIG_PATH="/usr/local/opt/krb5/lib/pkgconfig"
 
-export PATH="/Users/liqiang/dotfiles/myscripts:$PATH"
-
 # set frequently used aliases
 alias realpath='ll -d "$PWD"/*'
 alias cf="ls -l | grep -c '^-'"
 alias back="source back"
 alias killport="source killport"
 alias glog="git log | vim -"
+
+# Disable home brew automatic update other packages
+export HOMEBREW_NO_AUTO_UPDATE=1
