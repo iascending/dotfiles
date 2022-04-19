@@ -220,8 +220,12 @@ VI_MODE_SET_CURSOR=true
 MODE_INDICATOR="%F{yellow}+%f"
 
 # web search blendopt setup
-ZSH_WEB_SEARCH_ENGINES=(ghm "https://github.com/paradynsystems/blendopt/issues?q=is%3Aopen+assignee%3A%40")
+ZSH_WEB_SEARCH_ENGINES=(
+  ghm "https://github.com/paradynsystems/blendopt/issues?q=is%3Aopen+assignee%3A%40"
+  ghc "https://github.com/paradynsystems/blendopt/commit/"
+)
 alias ghm='web_search ghm me'
+alias ghc='web_search ghc'
 
 alias top='vtop --theme=wizard'
 # alias ls='colorls --sd'
@@ -234,3 +238,10 @@ alias we='curl wttr.in/Knoxfield\?3nqF'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# vim **<TAB>   # fzf open files (multi select with tab)
+# cd **<TAB>    # cd into sub directory
+# kill -9 <TAB> # fzf kill a process
+# ssh **<TAB>   # fzf ssh
+# CTRL-T        # paste selected onto command line
+# CTRL-R        # paste selected history onto command line
+# ALT-C         # cd into selected directory

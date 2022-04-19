@@ -2,14 +2,17 @@
 # ***    PLUGINS   *** #
 ########################
 set -g @plugin 'tmux-plugins/tmux-cpu'
+set -g @plugin 'laktak/extrakto'
 
 ########################
 # ***    DISPLAY   *** #
 ########################
 
+# tmux messages are displayed for 4 seconds
+set -g display-time 4000
+
 # Set tmux to display in 256 colors
 set -g default-terminal "screen-256color"
-# set -g default-terminal "xterm-256color"
 
 # Set border colors
 set-option -g pane-border-style 'fg=#343D46,bg=colour0'
@@ -47,35 +50,25 @@ set -g status-interval 10
 # set scrollback history to 10000 (10k)
 set -g history-limit 10000
 
+# shorten command delay
+set -sg escape-time 0
+
+# visual notification of activity in other windows
+setw -g monitor-activity on
+set -g visual-activity on
+
 # enable scroll with mouse
 set -g mouse on
 bind -n WheelUpPane if-shell -F -t = "#{mouse_any_flag}" "send-keys -M" "if -Ft= '#{pane_in_mode}' 'send-keys -M' 'select-pane -t=; copy-mode -e; send-keys -M'"
 bind -n WheelDownPane select-pane -t= \; send-keys -M
-
-# shorten command delay
-set -sg escape-time 0
 
 # reload ~/.tmux.conf using PREFIX r
 bind r source-file ~/.tmux.conf \; display "tmux.conf reloaded"
 
 # Bind <prefix>- to split window horizontally
 bind - split-window -v
-
 # Bind <prefix>| to split window vertically
 bind \\ split-window -h
-
-# vim-tmux-navigator mapping
-is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
-bind-key h if-shell "$is_vim" 'send-keys Home h'  'select-pane -L'
-bind-key j if-shell "$is_vim" 'send-keys Home j'  'select-pane -D'
-bind-key k if-shell "$is_vim" 'send-keys Home k'  'select-pane -U'
-bind-key l if-shell "$is_vim" 'send-keys Home l'  'select-pane -R'
-# bind-key -T copy-mode-vi 'h' select-pane -L
-# bind-key -T copy-mode-vi 'j' select-pane -D
-# bind-key -T copy-mode-vi 'k' select-pane -U
-# bind-key -T copy-mode-vi 'l' select-pane -R
-
 # resize panes using PREFIX H, J, K, L
 bind H resize-pane -L 5
 bind J resize-pane -D 5
@@ -84,9 +77,23 @@ bind L resize-pane -R 5
 bind g resize-pane -Z
 bind = select-layout even-horizontal
 
-# visual notification of activity in other windows
-setw -g monitor-activity on
-set -g visual-activity on
+# vim-tmux-navigator mapping
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+bind-key h if-shell "$is_vim" 'send-keys Home h' 'select-pane -L'
+bind-key j if-shell "$is_vim" 'send-keys Home j' 'select-pane -D'
+bind-key k if-shell "$is_vim" 'send-keys Home k' 'select-pane -U'
+bind-key l if-shell "$is_vim" 'send-keys Home l' 'select-pane -R'
+
+## set tmux vi mode
+set-option -g mode-keys vi
+bind-key -T copy-mode-vi 'H' send-keys '^'
+bind-key -T copy-mode-vi 'L' send-keys '$'
+bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
+bind-key -T copy-mode-vi 'y' send-keys -X copy-selection-and-cancel
+
+set -g @extrakto_split_size "15"
+set -g @extrakto_split_direction "v"
 
 #########################
 # ***  STATUS BAR   *** #
@@ -95,15 +102,13 @@ set -g visual-activity on
 ## Enable status bar
 set-option -g status on
 set -g status-position top
-
 ## Set window list to center
 set -g status-justify centre
-
 ## Set default bg/fg settings for status bar
 set-option -g status-style bright,bg='#1B2B34',fg=default
 
-set-window-option -g window-status-current-format ''
-set-window-option -g window-status-current-style fg=colour114,bg=default,bright
+set-option -g -w  window-status-current-format ''
+set-option -g -w  window-status-current-style fg=colour114,bg=default,bright
 
 ## Configure CPU plugin colors for statusline
 set -g @cpu_low_fg_color "#[fg=green]"
@@ -130,3 +135,46 @@ set-hook -g 'after-split-window' 'run-shell -b "if [ \#{window_zoomed_flag} -gt 
 
 # Initialize TMUX plugin manager
 run '~/.tmux/plugins/tpm/tpm'
+
+#########################
+# ***   SHORTCUTS   *** #
+#########################
+
+# prefix + :new                            # run commands from tmux terminal
+# tmux ls                                  # run command from local terminal
+# tmux list-keys                           # list tmux key mappings
+# tmux list-commands                       # list tmux commands
+# tmux                                     # create a new tmux session
+# tmux new                                 # create a new tmux session
+# tmux new-session                         # create a new tmux session
+# tmux new-session -s session_name         # create a session with name
+# prefix + :new                            # create a new tmux session
+# prefix+d                                 # return to local terminal from tmux session, everything is running in background
+# exit                                     # return to local terminal from tmux session, session ends if it is the only window
+# tmux list-sessions                       # list sessions
+# tmux rename -t old_name new_name         # rename a session
+# tmux rename-session -t old_name new_name # rename a session
+# tmux renamew -t old_name new_name        # rename a window
+# tmux rename-window -t old_name new_name  # rename a window
+# prefix+$                                 # rename current session
+# tmux kill-server                         # kill all sessions
+# tmux kill-session -t session_name        # kill session with name
+# tmux attach-session -t session_name      # attach session of name
+# prefix + s                               # select a session to attach
+# prefix + (                               # attach to previsous session
+# prefix + )                               # attach to next session
+# prefix + t                               # show clock
+# prefix + c                               # create a window
+# prefix + &                               # kill current window
+# prefix + n                               # change to next window
+# prefix + }                               # swap current pane with next pane
+# prefix + z                               # maximize current pane
+# prefix + x                               # kill current pane
+# prefix + ~                               # show tmux message
+# prefix + [                               # enter copy mode
+# prefix + ]                               # exit copy mode
+# v                                        # start selecton
+# y                                        # copy selection
+# Enter                                    # return to normal mode
+# prefix + right_option + u                # uninstall plugin
+# prefix + tab                             # extrakto completion with screen text
