@@ -84,7 +84,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #   - Exit if there's no match (--exit-0)
 fo() {
   local FILES
-  IFS=$'\n' FILES=($(fzf-tmux -w 100% -h 100% --query="$1" --multi --select-1 --exit-0 --preview "bat --style=numbers --color=always --line-range :500 {}"))
+  IFS=$'\n' FILES=$(fzf-tmux -d 100% --query="$1" --multi --select-1 --exit-0 --preview "bat --style=numbers --color=always --line-range :500 {}")
   [[ -n "$FILES" ]] && ${EDITOR:-vim} "${FILES[@]}"
 }
 
@@ -99,8 +99,7 @@ fd() {
 
 fif() {
   if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
-  local FILE
-  FILE="$(rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" | fzf-tmux -w 100% -h 100% +m --preview="bat --style=numbers --color=always --line-range :500 {}")" && echo "opening $FILE" && ${EDITOR:-vim} "$FILE" || return 1;
+  FILE=`rg --max-count=1 --ignore-case --files-with-matches --no-messages "$*" | fzf-tmux -d 100% +m --preview="bat --style=numbers --color=always --line-range :500 {}"` && echo "opening $FILE" && ${EDITOR:-vim} "$FILE" || return 1;
 }
 
 # fda - including hidden directories
