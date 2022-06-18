@@ -223,7 +223,7 @@ endfunction
 
 " --------------- vim plugin setup ---- coc.nvim ------------------------------
 "  disable coc.nvim for git buffer, which causes 'git log | vim -R -' slow
-let g:no_coc_file_types = ['git']
+let g:no_coc_file_types = ['git', 'csv', 'txt', 'md']
 function! s:disable_coc_for_type()
   if index(g:no_coc_file_types, &filetype) != -1
     let b:coc_enabled = 0
@@ -502,19 +502,6 @@ autocmd! myvimrc ColorScheme * call TrailingSpaceHighlights()
 autocmd! myvimrc ColorScheme * call s:custom_jason_colors()
 autocmd! myvimrc ColorScheme OceanicNext call s:custom_jason_colors()
 
-" Call method on window enter
-augroup WindowManagement
-  autocmd!
-  autocmd WinEnter * call Handle_Win_Enter()
-augroup END
-
-" Change highlight group of preview window when open
-function! Handle_Win_Enter()
-  if &previewwindow
-    setlocal winhighlight=Normal:MarkdownError
-  endif
-endfunction
-
 " Editor theme
 set background=dark
 try
@@ -607,6 +594,10 @@ nmap f <Plug>(easymotion-overwin-f2)
 " :Gclog --grep=findme --      # commit messages contains word
 " :Gclog -S "findme" --           # commits add or remove a word
 nnoremap <nowait><silent>gb :Git blame<CR>
+" 1) gb to enter git blame
+" 2) o to open diff in horizontal split
+" 3) :q to quit diff split
+" 4) q? for git blame help
 nnoremap <nowait><silent>gB :GBrowse<CR>
 vnoremap <nowait><silent>gB :GBrowse<CR>
 nnoremap <nowait><silent><leader>gp :Git push<CR>
@@ -624,25 +615,24 @@ nnoremap <nowait><silent>gs :Git<CR>
 " 3) dd to enter diff mode, and dq to quit diff mode
 " 4) ]q or [q navigate to a different commit
 " 5) dd/dv to enter diff mode, and dq to quit diff mode
-" 6) yoq to toggle open or close quickfix list
+" 6) gq to toggle open or close quickfix list
 " 7) Gedit to bring back to working version
 nnoremap <nowait><silent>gl :0Gclog<CR>
 vnoremap <nowait><silent>gl :Gclog<CR>
 
 " " Close any corresponding diff buffer
-" function! MyCloseDiff()
-"   if (winnr('$') < 2)
-"     return
-"   endif
-
-"   if (bufname(winbufnr(1)) !~ '^fugitive:' || bufname(winbufnr(2)) !~ '^fugitive:')
-"     echom "Not in diff view."
-"     return
-"   endif
-"   exe 'bdelete' winbufnr(1)
-"   exe 'Gedit'
-" endfunction
-" nnoremap <nowait><silent>qd :call MyCloseDiff()<CR>
+function! MyDiffClose()
+  if (winnr('$') < 2)
+    echom "Not in diff view."
+    return
+  endif
+  if (getbufvar(winbufnr(1), '&diff') == 0 || getbufvar(winbufnr(2), '&diff') == 0)
+    echom "Not in diff view."
+    return
+  endif
+  " exe 'bdelete' winbufnr(2)
+  call fugitive#DiffClose()
+endfunction
 
 " Toggle quickfix list open and close
 function! ToggleQuickFix()
@@ -652,7 +642,15 @@ function! ToggleQuickFix()
     cclose
   endif
 endfunction
-nnoremap <nowait><silent>yoq :call ToggleQuickFix()<CR>
+function! RemapDqGq()
+  if mapcheck('gq') == ""
+    nnoremap <nowait><silent><buffer>gq :call ToggleQuickFix()<CR>
+  endif
+  if mapcheck('dq') == ""
+    nnoremap <nowait><silent><buffer>dq :call MyDiffClose()<CR>
+  endif
+endfunction
+autocmd myvimrc BufEnter * call RemapDqGq()
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
@@ -840,7 +838,7 @@ inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {,<CR> {<CR>},<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
-imap cll console.log(;<Esc>==f(a
+imap cll console.log(;<Esc>==ci)
 
 let g:coc_global_extensions = [
   \ "coc-html",
@@ -924,6 +922,7 @@ let vim_markdown_preview_hotkey='<C-m>'
 " Search and replace
 " map <leader>s :%s///<left><left>
 " search word under cursor, search string in .py, .js .vue files
+" sp if\ '\$now'  # search string "if '$now'" in python files
 command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
 command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
 command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
@@ -945,7 +944,7 @@ nnoremap sa :Gg<space>
 " yor   # toggle relative line number
 " yoi   # toggle indent lines
 " yon   # toggle NerdTree
-" yoq   # toggle open close quickfix list
+" gq   # toggle open close quickfix list
 " yow   # toggle line wrap
 
 " --------------- vim-exchange shortcuts --------------------------

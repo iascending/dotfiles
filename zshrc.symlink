@@ -223,19 +223,45 @@ ZSH_WEB_SEARCH_ENGINES=(
   ghm "https://github.com/paradynsystems/blendopt/issues?q=is%3Aopen+assignee%3A%40"
   ghc "https://github.com/paradynsystems/blendopt/commit/"
 )
+
 alias ghm='web_search ghm me'
 alias ghc='web_search ghc'
-
-alias top='vtop --theme=wizard'
-# alias ls='colorls --sd'
-# alias ll='colorls -la --sd'
-alias ll='ls -alhG'
-
+alias top='htop'
+alias cat='bat -n'
+alias ip="echo Your ip is; dig +short myip.opendns.com @resolver1.opendns.com;"
 alias grep='grep -i --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn,.idea,.tox}'
-
 alias we='curl wttr.in/Knoxfield\?3nqF'
+alias du='ncdu --color dark -rr -x --exclude .git --exclude node_modules'
+alias man='tldr -t base16'
+export EXA_COLORS="\
+da=38;5;245:\
+di=38;5;14:\
+sn=38;5;28:\
+sb=38;5;28:\
+uu=38;5;44:\
+un=38;5;160:\
+gu=38;5;44:\
+gn=38:5:160:\
+bl=38;5;220:\
+ur=37:\
+uw=37:\
+ux=37:\
+ue=37:\
+gr=37:\
+gw=37:\
+gx=37:\
+tr=37:\
+tw=37:\
+tx=37:\
+su=37:\
+sf=37:\
+xa=37"
+# alias ll="exa --long --header --links --blocks --git --accessed --modified --created --group --all --sort=.name --group-directories-first"
+alias ll="exa --long --links --blocks --git --accessed --modified --created --group --all --sort=.name --group-directories-first"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# zsh -ixc : 2>&1 | grep ThingToFInd # find where an alias defined
 
 # vim **<TAB>   # fzf open files (multi select with tab)
 # cd **<TAB>    # cd into sub directory

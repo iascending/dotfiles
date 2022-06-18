@@ -139,5 +139,7 @@ Plug 'JamshedVesuna/vim-markdown-preview'
 " pgsql.vim
 Plug 'lifepillar/pgsql.vim'
 
+" rainbow csv for csv syntax highlight
+Plug 'mechatroner/rainbow_csv'
 " Initialize plugin system
 call plug#end()
