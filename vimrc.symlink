@@ -621,7 +621,7 @@ nnoremap <nowait><silent>gl :0Gclog<CR>
 vnoremap <nowait><silent>gl :Gclog<CR>
 
 " " Close any corresponding diff buffer
-function! MyDiffClose()
+function! DiffSplitClose()
   if (winnr('$') < 2)
     echom "Not in diff view."
     return
@@ -632,6 +632,9 @@ function! MyDiffClose()
   endif
   " exe 'bdelete' winbufnr(2)
   call fugitive#DiffClose()
+  if (bufname(winbufnr(1)) =~ '^fugitive:')
+    exe 'Gedit'
+  endif
 endfunction
 
 " Toggle quickfix list open and close
@@ -642,15 +645,24 @@ function! ToggleQuickFix()
     cclose
   endif
 endfunction
-function! RemapDqGq()
+function! IntegrateQuitKeyMappings()
+  " gq to close quickfix, commit, fugitive status, fugitiveblame buffer
   if mapcheck('gq') == ""
-    nnoremap <nowait><silent><buffer>gq :call ToggleQuickFix()<CR>
+    if !exists("b:fugitive_type") || b:fugitive_type != 'commit'
+      nnoremap <nowait><silent><buffer>gq :call ToggleQuickFix()<CR>
+    elseif (winnr('$') == 3 && b:fugitive_type == 'commit')
+      " gb fugitive blame, o open a patch, then quit patch
+      nnoremap <nowait><silent><buffer>gq :bdelete<CR>
+    elseif (winnr('$') < 3 && b:fugitive_type == 'commit')
+      " gl fugitive glog, hit enter to open a patch, then quit patch
+      nnoremap <nowait><silent><buffer>gq <C-O>
+    endif
   endif
   if mapcheck('dq') == ""
-    nnoremap <nowait><silent><buffer>dq :call MyDiffClose()<CR>
+    nnoremap <nowait><silent><buffer>dq :call DiffSplitClose()<CR>
   endif
 endfunction
-autocmd myvimrc BufEnter * call RemapDqGq()
+autocmd myvimrc BufEnter * call IntegrateQuitKeyMappings()
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
