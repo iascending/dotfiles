@@ -2,6 +2,8 @@
   "suggest.maxCompleteItemCount": 20,
   "tsserver.log": "verbose",
   "tsserver.trace.server": "verbose",
+  "typescript.validate.enable": false,
+  "typescript.suggest.enabled": false,
   "javascript.showUnused": false,
   "vetur.validation.interpolation": false,
   "vetur.ignoreProjectWarning": true,

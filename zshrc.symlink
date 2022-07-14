@@ -224,6 +224,16 @@ ZSH_WEB_SEARCH_ENGINES=(
   ghc "https://github.com/paradynsystems/blendopt/commit/"
 )
 
+# find files by filenam
+rgf() {
+  if [ -z "$2" ]
+  then
+      rg --files | rg "$1"
+  else
+      rg --files "$2" | rg "$1"
+  fi
+}
+
 alias ghm='web_search ghm me'
 alias ghc='web_search ghc'
 alias top='htop'

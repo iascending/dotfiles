@@ -12,6 +12,9 @@ set runtimepath+=~/.vim/plugged
 " set path for :find config files
 set path+=~/**1,~/.vim/**,~/dotfiles/**,~/.config/**,~/work/preprocess/**,~/Desktop/Projects/useful-commands/**
 
+" define python3 path for init vim and plugins (denite)
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 " Set encoding for editor itself, scriptencoding for vim scripts
 set encoding=utf-8
 
@@ -58,7 +61,7 @@ set shellcmdflag=-c
 
 " Automatically re-read file if a change was detected outside of vim
 set autoread
-autocmd myvimrc CursorHold * checktime
+autocmd! myvimrc CursorHold * if mode() != '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
 
 syntax on
 filetype plugin indent on
@@ -461,7 +464,7 @@ function! TrailingSpaceHighlights() abort
   call matchadd('Trail', '\s\+$', 100)
 endfunction
 
-function! s:custom_jason_colors()
+function! s:custom_syntax_highlight()
   " coc.nvim color changes
   hi link CocErrorSign WarningMsg
   hi link CocWarningSign Number
@@ -499,8 +502,7 @@ function! s:custom_jason_colors()
 endfunction
 
 autocmd! myvimrc ColorScheme * call TrailingSpaceHighlights()
-autocmd! myvimrc ColorScheme * call s:custom_jason_colors()
-autocmd! myvimrc ColorScheme OceanicNext call s:custom_jason_colors()
+autocmd! myvimrc ColorScheme * call s:custom_syntax_highlight()
 
 " Editor theme
 set background=dark
@@ -596,7 +598,7 @@ nmap f <Plug>(easymotion-overwin-f2)
 nnoremap <nowait><silent>gb :Git blame<CR>
 " 1) gb to enter git blame
 " 2) o to open diff in horizontal split
-" 3) :q to quit diff split
+" 3) gq to quit commit buffer
 " 4) q? for git blame help
 nnoremap <nowait><silent>gB :GBrowse<CR>
 vnoremap <nowait><silent>gB :GBrowse<CR>
@@ -612,11 +614,9 @@ nnoremap <nowait><silent><leader>gp :Git push<CR>
 nnoremap <nowait><silent>gs :Git<CR>
 " 1) gl to view git change history of current buffer
 " 2) ]q or [q navigate between commits in quickfix list
-" 3) dd to enter diff mode, and dq to quit diff mode
-" 4) ]q or [q navigate to a different commit
-" 5) dd/dv to enter diff mode, and dq to quit diff mode
-" 6) gq to toggle open or close quickfix list
-" 7) Gedit to bring back to working version
+" 3) dd/dv to enter diff mode, and dq to quit diff mode
+" 4) gq to toggle open or close quickfix list
+" 5) Gedit to bring back to working version
 nnoremap <nowait><silent>gl :0Gclog<CR>
 vnoremap <nowait><silent>gl :Gclog<CR>
 
@@ -655,7 +655,7 @@ function! IntegrateQuitKeyMappings()
       nnoremap <nowait><silent><buffer>gq :bdelete<CR>
     elseif (winnr('$') < 3 && b:fugitive_type == 'commit')
       " gl fugitive glog, hit enter to open a patch, then quit patch
-      nnoremap <nowait><silent><buffer>gq <C-O>
+      nnoremap <nowait><silent><buffer>gq :cc<CR>
     endif
   endif
   if mapcheck('dq') == ""
@@ -679,7 +679,7 @@ nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
-set updatetime=100
+set updatetime=1000
 nnoremap <nowait><silent>du :SignifyHunkUndo<CR>
 nnoremap <nowait><silent>dc :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
@@ -820,7 +820,7 @@ let proj_styles_src = 'app/client/src/assets/styles/'
 set isfname+=@-@
 set includeexpr=substitute(substitute(v:fname,'^@\/',proj_client_src,''),'^\\~styles\/',proj_styles_src,'')
 set suffixesadd=.js,.vue,.scss
-
+" let g:coc_uri_prefix_replace_patterns = {'@/': 'app/client/src/'}
 " Toggle - inclusion in keyword
 nnoremap <expr> <leader>t- ':set isk' . (index(split(&isk, ','), '-') == -1 ? '+' : '-') . '=-<cr>:set iskeyword?<cr>'
 nnoremap <expr> <leader>t/ ':set isk' . (index(split(&isk, ','), '/') == -1 ? '+' : '-') . '=/<cr>:set iskeyword?<cr>'
