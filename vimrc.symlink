@@ -10,7 +10,7 @@ augroup END
 set runtimepath+=~/.vim/plugged
 
 " set path for :find config files
-set path+=~/**1,~/.vim/**,~/dotfiles/**,~/.config/**,~/work/preprocess/**,~/Desktop/Projects/useful-commands/**
+set path+=~/**1,~/.vim/**,~/dotfiles/**,~/.config/**,~/work/preprocess/**,~/Desktop/Projects/**
 
 " define python3 path for init vim and plugins (denite)
 let g:python3_host_prog = '/usr/local/bin/python3'
@@ -30,7 +30,9 @@ let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
 " Vim airline theme
-let g:airline_theme='papercolor'
+" let g:airline_theme='papercolor'
+let g:airline_theme='simple'
+" let g:airline_theme='gruvbox'
 
 " Change vertical split character to be a space (essentially hide it)
 set fillchars+=vert:.
@@ -82,11 +84,9 @@ set hidden
 " Insert spaces when TAB is pressed
 set expandtab
 
-" Show a visual vertical line under cursor
-set cursorcolumn
-
-" Show a visual horizontal line under cursor
+" Show a visual horizontal and vertical line under cursor
 set cursorline
+set cursorcolumn
 
 " Show window title
 set title
@@ -97,6 +97,32 @@ set foldlevel=99
 
 " Set not to fold lines when opening file
 set nofoldenable
+
+" Map sort function to a key
+vnoremap <learder>s :sort<CR>
+
+" Easier moving code blocks
+vnoremap < <gv
+vnoremap > >gv
+
+" Map a ESC key to jk
+inoremap jk <ESC>
+inoremap kj <ESC>
+
+" Map line start and line end
+map L $
+map H ^
+
+" Do not move cursor when highlight
+nnoremap * *N
+nnoremap # #N
+
+" Move to next editor link
+nnoremap j gj
+nnoremap k gk
+
+nnoremap / /\V
+vnoremap / /\V
 
 " --------------- vim plugin setup ---- denite---------------------------------
 " Wrap in try/catch to avoid errors on initial install before plugin is available
@@ -312,7 +338,6 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 " Set NERDTree default window size
 let g:NERDTreeWinSize=60
-
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_enable_unite = 1
@@ -336,65 +361,57 @@ let WebDevIconsUnicodeDecorateFolderNodesExactMatches = 1
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
-
 " Hide certain files and directories from NERDTree
 let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
 
 " --------------- vim plugin setup ---- vim airline ---------------------------
  " Wrap in try/catch to avoid errors on initial install before plugin is available
 try
-" === Vim airline ==== "
-" Enable extensions
-let g:airline_extensions = ['branch', 'hunks', 'coc']
+  " Enable extensions
+  " let g:airline_extensions = ['branch', 'hunks', 'coc']
+  let g:airline_extensions = ['branch']
+  " Do not draw separators for empty sections (only for the active window) >
+  let g:airline_skip_empty_sections = 1
+  " Smartly uniquify buffers names with similar filename, suppressing common parts of paths.
+  let g:airline#extensions#tabline#formatter = 'unique_tail'
+  " Custom setup that removes filetype/whitespace from default vim airline bar
+  let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
 
-" Do not draw separators for empty sections (only for the active window) >
-let g:airline_skip_empty_sections = 1
+  " Customize vim airline per filetype
+  " 'nerdtree'  - Hide nerdtree status line
+  " 'list'      - Only show file type plus current line number out of total
+  let g:airline_filetype_overrides = {
+    \ 'nerdtree': [ get(g:, 'NERDTreeStatusline', ''), '' ],
+    \ 'list': [ '%y', '%l/%L'],
+    \ }
 
-" Smartly uniquify buffers names with similar filename, suppressing common parts of paths.
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+  " Enable powerline fonts
+  let g:airline_powerline_fonts = 1
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+  let g:airline_symbols.paste = 'PASTE - '
+  let g:airline_left_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_sep = ''
+  let g:airline_right_alt_sep = ''
+  let g:airline_symbols.branch = ''
+  let g:airline_symbols.readonly = ''
+  let g:airline_symbols.linenr = ''
+  let g:airline_symbols.maxlinenr = ''
+  let g:airline_symbols.dirty='⚡'
 
-" Custom setup that removes filetype/whitespace from default vim airline bar
-let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
+  let g:airline_section_a = airline#section#create(['paste', 'mode'])
+  function! AirlineInit()
+    let g:airline_section_b = airline#section#create(['branch'])
+    call airline#update_statusline()
+  endfunction
+  autocmd myvimrc VimEnter * call AirlineInit()
 
-" Customize vim airline per filetype
-" 'nerdtree'  - Hide nerdtree status line
-" 'list'      - Only show file type plus current line number out of total
-let g:airline_filetype_overrides = {
-  \ 'nerdtree': [ get(g:, 'NERDTreeStatusline', ''), '' ],
-  \ 'list': [ '%y', '%l/%L'],
-  \ }
-
-" Enable powerline fonts
-let g:airline_powerline_fonts = 1
-
-" Define custom airline symbols
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-let g:airline_symbols.paste = 'PASTE - '
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.dirty='⚡'
-
-let g:airline_section_a = airline#section#create(['paste', 'mode'])
-function! AirlineInit()
-  let g:airline_section_b = airline#section#create(['branch'])
-  call airline#update_statusline()
-endfunction
-autocmd myvimrc VimEnter * call AirlineInit()
-
-" Enable caching of syntax highlighting groups
-let g:airline_highlighting_cache = 1
-
-" Don't show git changes to current file in airline
-let g:airline#extensions#hunks#enabled=0
-
+  " Enable caching of syntax highlighting groups
+  let g:airline_highlighting_cache = 1
+  " Don't show git changes to current file in airline
+  let g:airline#extensions#hunks#enabled=0
 catch
   echo 'Airline not installed. It should work after running :PlugInPtall'
 endtry
@@ -420,7 +437,6 @@ let g:signify_sign_delete = '-'
 
 " --------------- vim plugin setup ---- vim-vue-plugin ------------------------
 "  this set of config: vim-vue-plugin without vim-context-commentstring
-let b:current_loading_main_syntax = 'vue'
 let g:vim_vue_plugin_config = {
   \'syntax': {
   \   'template': ['html'],
@@ -429,9 +445,9 @@ let g:vim_vue_plugin_config = {
   \},
   \'full_syntax': [],
   \'initial_indent': ['script', 'style'],
-  \'attribute': 0,
-  \'keyword': 0,
-  \'foldexpr': 0,
+  \'attribute': 1,
+  \'keyword': 1,
+  \'foldexpr': 1,
   \'debug': 0,
   \}
 
@@ -459,12 +475,11 @@ nnoremap <nowait><silent>yoi :IndentLinesToggle<CR>
 " Add custom highlights in method that is executed every time a colorscheme is sourced
 " See https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f for details
 function! TrailingSpaceHighlights() abort
-  " Hightlight trailing whitespace
   highlight Trail ctermbg=red guibg=red
   call matchadd('Trail', '\s\+$', 100)
 endfunction
 
-function! s:custom_syntax_highlight()
+function! s:oceanic_extra_highlight()
   " coc.nvim color changes
   hi link CocErrorSign WarningMsg
   hi link CocWarningSign Number
@@ -501,36 +516,25 @@ function! s:custom_syntax_highlight()
   hi CocUnusedHighlight ctermfg=242 guifg=#777777
 endfunction
 
-autocmd! myvimrc ColorScheme * call TrailingSpaceHighlights()
-autocmd! myvimrc ColorScheme * call s:custom_syntax_highlight()
+function! s:gruvbox_extra_highlight()
+  " Make background color transparent for git changes
+  hi SignifySignAdd ctermbg=NONE guibg=NONE guifg=#99c794
+  hi SignifySignDelete ctermbg=NONE guibg=NONE guifg=#ec5f67
+  hi SignifySignChange ctermbg=NONE guibg=NONE guifg=#c594c5
 
-" Editor theme
+  " Highlight git diff added and removed lines
+  hi DiffAdded   term=reverse ctermfg=0 ctermbg=121 guifg=bg guibg=#99c794
+  hi DiffRemoved term=NONE ctermfg=253 ctermbg=203 guifg=#d8dee9 guibg=#ec5f67
+  hi CocUnusedHighlight ctermfg=242 guifg=#777777
+endfunction
+
 set background=dark
-try
-  colorscheme OceanicNext
-catch
-  colorscheme slate
-endtry
-
-" --------------- vim misc keymappings ----------------------------------------
-" Map a ESC key to jk
-inoremap jk <ESC>
-inoremap kj <ESC>
-
-" Map line start and line end
-map L $
-map H ^
-
-" Do not move cursor when highlight
-nnoremap * *N
-nnoremap # #N
-
-" Move to next editor link
-nnoremap j gj
-nnoremap k gk
-
-nnoremap / /\v
-vnoremap / /\v
+autocmd! myvimrc ColorScheme * call TrailingSpaceHighlights()
+" autocmd! myvimrc ColorScheme * call s:oceanic_extra_highlight()
+" colorscheme OceanicNext
+autocmd! myvimrc ColorScheme * call s:gruvbox_extra_highlight()
+colorscheme gruvbox
+" colorscheme papercolor
 
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Toggle NERDTree on/off
@@ -571,8 +575,6 @@ autocmd myvimrc User CocLocationsChange CocList --no-quit --normal location
 nmap <nowait><silent>gd <Plug>(coc-definition)
 " Jump to references of current symbol
 nmap <nowait><silent>gr <Plug>(coc-references)
-" Jump to implementation of current symbol
-nmap <nowait><silent>gi <Plug>(coc-implementation)
 " Auto fix current
 nmap <nowait><silent>qf <Plug>(coc-fix-current)
 nmap <nowait><silent>ac <Plug>(coc-codeaction)
@@ -645,10 +647,11 @@ function! ToggleQuickFix()
     cclose
   endif
 endfunction
+
 function! IntegrateQuitKeyMappings()
-  " gq to close quickfix, commit, fugitive status, fugitiveblame buffer
   if mapcheck('gq') == ""
     if !exists("b:fugitive_type") || b:fugitive_type != 'commit'
+      " normal buffer, gq to toggle quickfix buffer
       nnoremap <nowait><silent><buffer>gq :call ToggleQuickFix()<CR>
     elseif (winnr('$') == 3 && b:fugitive_type == 'commit')
       " gb fugitive blame, o open a patch, then quit patch
@@ -661,8 +664,16 @@ function! IntegrateQuitKeyMappings()
   if mapcheck('dq') == ""
     nnoremap <nowait><silent><buffer>dq :call DiffSplitClose()<CR>
   endif
+  if (bufname('%') == '[Command Line]')
+    " toggle command line buffer open and close
+    nnoremap <nowait><silent><buffer>gq :q<CR>
+  endif
+  if (bufname('%') =~ '^__Gundo')
+    " toggle Gundo.vim buffer open and close
+    nnoremap <nowait><silent><buffer>gq :GundoToggle<CR>
+  endif
 endfunction
-autocmd myvimrc BufEnter * call IntegrateQuitKeyMappings()
+autocmd myvimrc BufEnter,CmdwinEnter * call IntegrateQuitKeyMappings()
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
@@ -679,7 +690,7 @@ nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
-set updatetime=1000
+set updatetime=500
 nnoremap <nowait><silent>du :SignifyHunkUndo<CR>
 nnoremap <nowait><silent>dc :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
@@ -764,13 +775,14 @@ if exists('g:loaded_webdevicons')
 endif
 
 " Source vimrc
+autocmd! myvimrc bufwritepost .vimrc source %
 nnoremap <leader>sv :source ~/.vimrc<CR>:echo "Reloaded .vimrc"<CR>
 
 " cd into current buffer's directory
 nnoremap <leader>cd :lcd %:p:h<CR>
 
 " Copy the full path of current buffer
-nnoremap <silent> <leader>cp :let @+=expand('%:p')<CR>
+nnoremap <silent> <leader>cp :let @+=expand('%:p:h')<CR>
 
 " Disable vim-tmux-navigator's default key mapping
 let g:tmux_navigator_no_mappings = 1
@@ -931,6 +943,11 @@ let g:sql_type_override='pgsql'
 let vim_markdown_preview_github=1
 let vim_markdown_preview_hotkey='<C-m>'
 
+" --------------- vim plugin setup ---- gundo.vim --------------------------
+let g:gundo_prefer_python3 = 1
+let g:gundo_preview_bottom = 1
+nnoremap <nowait><silent>gu :GundoToggle<CR>
+
 " Search and replace
 " map <leader>s :%s///<left><left>
 " search word under cursor, search string in .py, .js .vue files
@@ -944,6 +961,18 @@ nnoremap sp :Ggpy<space>
 nnoremap sv :Ggjv<space>
 nnoremap sa :Gg<space>
 
+function SetConfType()
+  if !empty(matchstr(getline('1'), '^#\s.*'))
+    set filetype=dosini
+  endif
+endfunction
+autocmd myvimrc BufEnter *.txt call SetConfType()
+
+packadd! Cfilter
+let g:vim_json_conceal=0
+set history=10000
+set cmdwinheight=15
+
 " --------------- vim-unimpaired shortcuts --------------------------
 " [b ]b # :bprevious :bnext
 " [q ]q # :cprevious :cnext
@@ -956,6 +985,7 @@ nnoremap sa :Gg<space>
 " yor   # toggle relative line number
 " yoi   # toggle indent lines
 " yon   # toggle NerdTree
+" gu   # toggle Gundo
 " gq   # toggle open close quickfix list
 " yow   # toggle line wrap
 
@@ -964,9 +994,3 @@ nnoremap sa :Gg<space>
 "  X      # exchange for visual mode
 "  cxc    # clear pending exchange
 
-function SetConfType()
-  if !empty(matchstr(getline('1'), '^#\s.*'))
-    set filetype=dosini
-  endif
-endfunction
-autocmd myvimrc BufEnter *.txt call SetConfType()

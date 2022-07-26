@@ -26,20 +26,13 @@ Plug 'ntpeters/vim-better-whitespace'
 " vim-exchange
 Plug 'tommcdo/vim-exchange'
 
-" vim-unimpaired
+" tpope's vim plugins
 Plug 'tpope/vim-unimpaired'
-
-" vim-surround
 Plug 'tpope/vim-surround'
-
-" vim-repeat
 Plug 'tpope/vim-repeat'
-
-" vim-sleuth
 Plug 'tpope/vim-sleuth'
-
-" vim-commentary
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-abolish'
 " Plug 'suy/vim-context-commentstring'
 
 " indentation
@@ -82,6 +75,7 @@ Plug 'heavenshell/vim-jsdoc'
 
 " Vuejs plugin
 Plug 'leafOfTree/vim-vue-plugin'
+Plug 'mattn/emmet-vim'
 " Plug 'posva/vim-vue'
 
 " === Syntax Highlighting === "
@@ -101,6 +95,8 @@ Plug 'scrooloose/nerdtree'
 
 " Colorscheme
 Plug 'mhartington/oceanic-next'
+Plug 'morhetz/gruvbox'
+Plug 'NLKNguyen/papercolor-theme'
 
 " Customized vim status line
 Plug 'vim-airline/vim-airline'
@@ -110,36 +106,28 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-" vim easy align
 Plug 'junegunn/vim-easy-align'
-
-" vim-tmux-navigator
 Plug 'christoomey/vim-tmux-navigator'
 
 " open-browser
 Plug 'tyru/open-browser.vim'
 Plug 'tyru/open-browser-github.vim'
 
-" Dash integration
-Plug 'rizzatti/dash.vim'
-
 " vim-dadbod database integration
 Plug 'tpope/vim-dadbod'
-
-" vim-python-pep8-indent
-Plug 'vimjas/vim-python-pep8-indent'
-
-" vim-test
-Plug 'vim-test/vim-test'
-
-" vim-markdown
-Plug 'tpope/vim-markdown'
-Plug 'JamshedVesuna/vim-markdown-preview'
-
-" pgsql.vim
 Plug 'lifepillar/pgsql.vim'
+
+Plug 'rizzatti/dash.vim'
+Plug 'vim-test/vim-test'
+Plug 'tpope/vim-markdown'
+Plug 'vimjas/vim-python-pep8-indent'
+Plug 'JamshedVesuna/vim-markdown-preview'
+Plug 'hashivim/vim-terraform'
 
 " rainbow csv for csv syntax highlight
 Plug 'mechatroner/rainbow_csv'
+
+Plug 'sjl/gundo.vim'
+
 " Initialize plugin system
 call plug#end()

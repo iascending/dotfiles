@@ -37,6 +37,7 @@ alias realpath='ll -d "$PWD"/*'
 alias cf="ls -l | grep -c '^-'"
 alias back="source back"
 alias killport="source killport"
+alias mkvl="source mkvl"
 alias glog="git log | vim -"
 
 # Disable home brew automatic update other packages

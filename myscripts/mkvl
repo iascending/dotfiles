@@ -1,0 +1,62 @@
+#! /bin/bash
+
+PROJ_NAME="$1"
+COC_CONFIG=coc-settings.json
+PYRIGHT_CONFIG=pyrightconfig.json
+
+tput reset
+echo ":::: Create new directory: ${PROJ_NAME} ..."
+mkdir -p ${PROJ_NAME} && cd ${PROJ_NAME}
+
+echo ":::: Create Python virtual environment: ${PROJ_NAME} ..."
+python3 -m venv .venv
+
+echo ":::: Activate virtual environment: ${PROJ_NAME} ..."
+source .venv/bin/activate
+
+echo ":::: Upgrade pip and install pytest ..."
+pip install --upgrade pip > /dev/null 2>&1
+pip install pytest > /dev/null 2>&1
+pip install autopep8 > /dev/null 2>&1
+pip install sourcery > /dev/null 2>&1
+
+PYTHON_PATH=$(which python | sed 's_/_\\/_g')
+SOURCERY_PATH=$(which sourcery | sed 's_/_\\/_g')
+
+echo ":::: Configure COC settings ..."
+cp ~/dotfiles/$COC_CONFIG .
+UPDATED_CONFIG="$(jq '
+    ."python.pythonPath"="'"$PYTHON_PATH"'" |
+    .languageserver.sourcery.command="'"$SOURCERY_PATH"'"
+' $COC_CONFIG)"
+echo -E "${UPDATED_CONFIG}" > $COC_CONFIG
+
+echo ":::: Configure Pyright ..."
+cp ~/dotfiles/$PYRIGHT_CONFIG .
+UPDATED_CONFIG="$(jq '
+    ."python.pythonPath" |= "'"$PYTHON_PATH"'"
+' $PYRIGHT_CONFIG)"
+echo -E "${UPDATED_CONFIG}" > $PYRIGHT_CONFIG
+
+echo ":::: Configure pytest ..."
+mkdir -p tests
+cat <<EOF >tests/test_example.py
+def test_simple():
+    """ Test simple arithemtic operations."""
+
+    assert 1 == 1
+    assert 2 == 2
+EOF
+
+cat <<EOF >tests/conftest.py
+import os
+import sys
+
+root = os.path.abspath(os.path.join(os.path.dirname(__file__),  '..'))
+sys.path.append(root)
+EOF
+
+echo ":::: pytest usage:"
+echo "     from entry_file_in_root_dir import xyz"
+echo "     pytest ."
+
