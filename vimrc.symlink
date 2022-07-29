@@ -10,10 +10,11 @@ augroup END
 set runtimepath+=~/.vim/plugged
 
 " set path for :find config files
-set path+=~/**1,~/.vim/**,~/dotfiles/**,~/.config/**,~/work/preprocess/**,~/Desktop/Projects/**
-
-" define python3 path for init vim and plugins (denite)
-let g:python3_host_prog = '/usr/local/bin/python3'
+set path+=~/**1,~/.vim/**,~/dotfiles/**,~/.config/**,~/Desktop/Projects/**,~/Downloads/**
+set path+=~/work/preprocess/**,~/work/blendopt/**
+set wildignore+=**/blendopt/app/data/**,**/blendopt/app/media/**,**/.tox/**,**/*egg*/**
+set wildignore+=**/lib/**,**/node_modules/**,**/.git/**,**/__pycache__/**
+set wildignore+=**/bin/**,**/dist/**,**/build/**
 
 " Set encoding for editor itself, scriptencoding for vim scripts
 set encoding=utf-8
@@ -28,11 +29,6 @@ let mapleader=" "
 set termguicolors
 let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
-
-" Vim airline theme
-" let g:airline_theme='papercolor'
-let g:airline_theme='simple'
-" let g:airline_theme='gruvbox'
 
 " Change vertical split character to be a space (essentially hide it)
 set fillchars+=vert:.
@@ -63,7 +59,7 @@ set shellcmdflag=-c
 
 " Automatically re-read file if a change was detected outside of vim
 set autoread
-autocmd! myvimrc CursorHold * if mode() != '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
+autocmd myvimrc CursorHold * if mode() != '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
 
 syntax on
 filetype plugin indent on
@@ -85,8 +81,8 @@ set hidden
 set expandtab
 
 " Show a visual horizontal and vertical line under cursor
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 
 " Show window title
 set title
@@ -125,6 +121,8 @@ nnoremap / /\V
 vnoremap / /\V
 
 " --------------- vim plugin setup ---- denite---------------------------------
+" define python3 path for init vim and denite plugins
+let g:python3_host_prog = '/usr/local/bin/python3'
 " Wrap in try/catch to avoid errors on initial install before plugin is available
 try
 " === Denite setup ==="
@@ -258,10 +256,7 @@ function! s:disable_coc_for_type()
     let b:coc_enabled = 0
   endif
 endfunction
-augroup CocGroup
-  autocmd!
-  autocmd BufNew,BufEnter * call s:disable_coc_for_type()
-augroup end
+autocmd myvimrc BufNew,BufEnter * call s:disable_coc_for_type()
 
 " use <tab> for trigger completion and navigate to next complete item
 function! s:check_back_space() abort
@@ -310,11 +305,13 @@ autocmd myvimrc FileType javascript,vue,python nnoremap <buffer><nowait><silent>
 " K on commit hash in git log to show changes
 autocmd myvimrc FileType git setlocal keywordprg=git\ show
 
+autocmd myvimrc FileType json,yaml setlocal tabstop=2 shiftwidth=2 expandtab
+
 " Highlight the symbol and its references when holding the cursor.
 autocmd myvimrc CursorHold * silent call CocActionAsync('highlight')
 
 "Close preview window when completion is done.
-autocmd! myvimrc CompleteDone * if pumvisible() == 0 | pclose | endif
+autocmd myvimrc CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " --------------- vim plugin setup ---- NeoSnippet ----------------------------
 " Map <C-k> as shortcut to activate snippet if available
@@ -365,6 +362,9 @@ let g:WebDevIconsNerdTreeBeforeGlyphPadding = ''
 let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
 
 " --------------- vim plugin setup ---- vim airline ---------------------------
+let g:airline_theme='papercolor'
+" let g:airline_theme='simple'
+" let g:airline_theme='gruvbox'
  " Wrap in try/catch to avoid errors on initial install before plugin is available
 try
   " Enable extensions
@@ -479,7 +479,8 @@ function! TrailingSpaceHighlights() abort
   call matchadd('Trail', '\s\+$', 100)
 endfunction
 
-function! s:oceanic_extra_highlight()
+function! s:DarkBackgroundExtraHighlights()
+  set background=dark
   " coc.nvim color changes
   hi link CocErrorSign WarningMsg
   hi link CocWarningSign Number
@@ -499,24 +500,9 @@ function! s:oceanic_extra_highlight()
 
   " Customize NERDTree directory
   hi NERDTreeCWD guifg=#99c794
-
-  " Make background color transparent for git changes
-  hi SignifySignAdd ctermbg=NONE guibg=NONE
-  hi SignifySignDelete ctermbg=NONE guibg=NONE
-  hi SignifySignChange ctermbg=NONE guibg=NONE
-
-  " Highlight git change signs
-  hi SignifySignAdd guifg=#99c794
-  hi SignifySignDelete guifg=#ec5f67
-  hi SignifySignChange guifg=#c594c5
-
-  " Highlight git diff added and removed lines
-  hi DiffAdded   term=reverse ctermfg=0 ctermbg=121 guifg=bg guibg=#99c794
-  hi DiffRemoved term=NONE ctermfg=253 ctermbg=203 guifg=#d8dee9 guibg=#ec5f67
-  hi CocUnusedHighlight ctermfg=242 guifg=#777777
 endfunction
 
-function! s:gruvbox_extra_highlight()
+function! s:DiffChangesExtraHighlights()
   " Make background color transparent for git changes
   hi SignifySignAdd ctermbg=NONE guibg=NONE guifg=#99c794
   hi SignifySignDelete ctermbg=NONE guibg=NONE guifg=#ec5f67
@@ -528,13 +514,15 @@ function! s:gruvbox_extra_highlight()
   hi CocUnusedHighlight ctermfg=242 guifg=#777777
 endfunction
 
-set background=dark
-autocmd! myvimrc ColorScheme * call TrailingSpaceHighlights()
-" autocmd! myvimrc ColorScheme * call s:oceanic_extra_highlight()
+" to fix highllighting strips around trans blocks in vue files 
+let html_no_rendering=1
+autocmd myvimrc ColorScheme * call TrailingSpaceHighlights()
+autocmd myvimrc ColorScheme * call s:DiffChangesExtraHighlights()
+autocmd myvimrc ColorScheme OceanicNext,papercolor call s:DarkBackgroundExtraHighlights()
+
 " colorscheme OceanicNext
-autocmd! myvimrc ColorScheme * call s:gruvbox_extra_highlight()
-colorscheme gruvbox
-" colorscheme papercolor
+" colorscheme gruvbox
+colorscheme xcode
 
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Toggle NERDTree on/off
@@ -674,7 +662,7 @@ function! IntegrateQuitKeyMappings()
   endif
 endfunction
 autocmd myvimrc BufEnter,CmdwinEnter * call IntegrateQuitKeyMappings()
-autocmd BufReadPost fugitive://* set bufhidden=delete
+autocmd myvimrc BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
 let g:netrw_nogx = 1
@@ -690,7 +678,7 @@ nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
-set updatetime=500
+set updatetime=1000
 nnoremap <nowait><silent>du :SignifyHunkUndo<CR>
 nnoremap <nowait><silent>dc :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
@@ -805,9 +793,7 @@ function! ToggleZoom(zoom)
     exec "normal \<C-W>\|\<C-W>_"
   endif
 endfunction
-augroup restorezoom
-  autocmd WinEnter * silent! :call ToggleZoom(v:false)
-augroup END
+autocmd myvimrc WinEnter * silent! :call ToggleZoom(v:false)
 nnoremap <silent><leader>g :call ToggleZoom(v:true)<CR>
 
 " close all windows except current one
@@ -878,10 +864,7 @@ let g:coc_global_extensions = [
 autocmd myvimrc FileType python let b:coc_root_patterns = ['.git', '.env']
 
 " highlight the part of line longer than 80 characters
-augroup TooLong
-  autocmd!
-  autocmd winEnter,BufEnter * call clearmatches() | call matchadd('ColorColumn', '\%>80v', 100)
-augroup END
+autocmd myvimrc winEnter,BufEnter * call clearmatches() | call matchadd('ColorColumn', '\%>80v', 100)
 
 " edit all buffers and come back without losing highlight, borrowed from rominl
 function! EditAllBuffersAndComeBackWithoutLosingHighlighting()
@@ -990,7 +973,10 @@ set cmdwinheight=15
 " yow   # toggle line wrap
 
 " --------------- vim-exchange shortcuts --------------------------
-"  cxiw . # exchange 2 words
-"  X      # exchange for visual mode
-"  cxc    # clear pending exchange
+"  cxiw .                 # exchange 2 words
+"  X                      # exchange for visual mode
+"  cxc                    # clear pending exchange
 
+" gg=G                    # reformat the indentation of whole file
+" :%!jq .                 # reformat json file indentation
+" :%!python3 -m json.tool # reformat json file indentation

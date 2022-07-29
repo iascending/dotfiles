@@ -50,30 +50,40 @@
   "python.linting.enabled": true,
   "python.analysis.autoImportCompletions": true,
   "python.analysis.diagnosticSeverityOverrides": {
-      "reportGeneralTypeIssues": "none"
+    "reportGeneralTypeIssues": "none"
   },
   "python.pythonPath": "/Users/liqiang/.virtualenvs/blendopt/bin/python3",
   "list.maxPreviewHeight": 30,
   "languageserver": {
-      "sourcery": {
-          "command": "/Users/liqiang/.virtualenvs/blendopt/bin/sourcery",
-          "args": [
-              "lsp"
-          ],
-          "filetypes": [
-              "python"
-          ],
-          "initializationOptions": {
-              "token": "user_QsQbGeeWb9I48TrU2WAIB0lAYyD8NCamSOLiercib_FW8lZeMXZfdeicUlo",
-              "extension_version": "coc.nvim",
-              "editor_version": "vim"
-          },
-          "settings": {
-              "sourcery": {
-                  "metricsEnabled": true
-              }
-          },
-          "trace.server": "verbose"
-      }
+    "sourcery": {
+      "command": "/Users/liqiang/.virtualenvs/blendopt/bin/sourcery",
+      "args": [
+        "lsp"
+      ],
+      "filetypes": [
+        "python"
+      ],
+      "initializationOptions": {
+        "token": "user_QsQbGeeWb9I48TrU2WAIB0lAYyD8NCamSOLiercib_FW8lZeMXZfdeicUlo",
+        "extension_version": "coc.nvim",
+        "editor_version": "vim"
+      },
+      "settings": {
+        "sourcery": {
+          "metricsEnabled": true
+        }
+      },
+      "trace.server": "verbose"
+    },
+    "terraform": {
+      "command": "terraform-ls",
+      "args": ["serve"],
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
+    }
   }
 }

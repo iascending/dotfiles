@@ -83,7 +83,8 @@ Plug 'mattn/emmet-vim'
 Plug 'chr4/nginx.vim'
 
 " Syntax highlighting for javascript libraries
-Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'pangloss/vim-javascript'
+" Plug 'othree/javascript-libraries-syntax.vim'
 
 " Improved syntax highlighting and indentation
 " Possiblely slow down vim-vue and vim-vue-plugins
@@ -97,6 +98,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'mhartington/oceanic-next'
 Plug 'morhetz/gruvbox'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'JaySandhu/xcode-vim'
 
 " Customized vim status line
 Plug 'vim-airline/vim-airline'
