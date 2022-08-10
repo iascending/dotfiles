@@ -5,6 +5,9 @@
   "typescript.validate.enable": false,
   "typescript.suggest.enabled": false,
   "javascript.showUnused": false,
+  "yaml.schemas": {
+    "kubernetes": ["*-deployment.yaml", "*-service.yaml", "*-volume-claim.yaml"]
+  },
   "vetur.validation.interpolation": false,
   "vetur.ignoreProjectWarning": true,
   "vetur.validation.template": false,
@@ -53,16 +56,42 @@
     "reportGeneralTypeIssues": "none"
   },
   "python.pythonPath": "/Users/liqiang/.virtualenvs/blendopt/bin/python3",
-  "list.maxPreviewHeight": 30,
+  "list.height": 20,
+  "list.previewSplitRight": true,
+  "list.maxPreviewHeight": 100,
+  "list.source.files.command": "rg",
+  "list.source.files.args": [
+    "--hidden",
+    "--files",
+    "--glob",
+    "!.git",
+    "--vimgrep",
+    "--heading",
+    "-S",
+    "-F"
+  ],
+  "list.source.grep.args": ["--smart-case"],
+  "list.source.words.defaultOptions": ["--interactive", "--ignore-case"],
+  "list.normalMappings": {
+    "<C-o>": "do:togglemode",
+    "/": "do:togglemode",
+    "d": "action:delete",
+    "p": "action:preview",
+    "<C-v>": "action:vsplit",
+    "<C-t>": "action:tabe"
+  },
+  "list.insertMappings": {
+    "<C-o>": "do:togglemode",
+    "<C-n>": "normal:j",
+    "<C-p>": "normal:k",
+    "<C-v>": "action:vsplit",
+    "<C-t>": "action:tabe"
+  },
   "languageserver": {
     "sourcery": {
       "command": "/Users/liqiang/.virtualenvs/blendopt/bin/sourcery",
-      "args": [
-        "lsp"
-      ],
-      "filetypes": [
-        "python"
-      ],
+      "args": ["lsp"],
+      "filetypes": ["python"],
       "initializationOptions": {
         "token": "user_QsQbGeeWb9I48TrU2WAIB0lAYyD8NCamSOLiercib_FW8lZeMXZfdeicUlo",
         "extension_version": "coc.nvim",
@@ -78,10 +107,7 @@
     "terraform": {
       "command": "terraform-ls",
       "args": ["serve"],
-      "filetypes": [
-        "terraform",
-        "tf"
-      ],
+      "filetypes": ["terraform", "tf"],
       "initializationOptions": {},
       "settings": {}
     }

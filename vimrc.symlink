@@ -11,10 +11,10 @@ set runtimepath+=~/.vim/plugged
 
 " set path for :find config files
 set path+=~/**1,~/.vim/**,~/dotfiles/**,~/.config/**,~/Desktop/Projects/**,~/Downloads/**
-set path+=~/work/preprocess/**,~/work/blendopt/**
+set path+=/usr/local/bin,~/work/preprocess/**,~/work/blendopt/**
 set wildignore+=**/blendopt/app/data/**,**/blendopt/app/media/**,**/.tox/**,**/*egg*/**
 set wildignore+=**/lib/**,**/node_modules/**,**/.git/**,**/__pycache__/**
-set wildignore+=**/bin/**,**/dist/**,**/build/**
+set wildignore+=**/dist/**,**/build/**
 
 " Set encoding for editor itself, scriptencoding for vim scripts
 set encoding=utf-8
@@ -31,7 +31,7 @@ let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
 let &t_8b = "\<Esc>[48:2:%lu:%lu:%lum"
 
 " Change vertical split character to be a space (essentially hide it)
-set fillchars+=vert:.
+set fillchars+=vert:\ 
 
 " Set preview window to appear at bottom or right
 set splitbelow
@@ -514,7 +514,7 @@ function! s:DiffChangesExtraHighlights()
   hi CocUnusedHighlight ctermfg=242 guifg=#777777
 endfunction
 
-" to fix highllighting strips around trans blocks in vue files 
+" to fix highllighting strips around trans blocks in vue files
 let html_no_rendering=1
 autocmd myvimrc ColorScheme * call TrailingSpaceHighlights()
 autocmd myvimrc ColorScheme * call s:DiffChangesExtraHighlights()
@@ -539,21 +539,46 @@ autocmd myvimrc BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('
 autocmd myvimrc BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
   \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
+" coc grep word under cursor
+command! -nargs=+ -complete=custom,s:GrepArgs Rg exe 'CocList grep '.<q-args>
+function! s:GrepArgs(...)
+  let list = ['-S', '-smartcase', '-i', '-ignorecase', '-w', '-word',
+        \ '-e', '-regex', '-u', '-skip-vcs-ignores', '-t', '-extension']
+  return join(list, "\n")
+endfunction
+
 " --------------- vim plugin setup ---- denite keymappings --------------------
-" Browser currently open buffers with (Denite)
-nmap <leader>; :Denite buffer<CR>
+" " Browser currently open buffers with (Denite)
+" nmap <leader>; :Denite buffer<CR>
+" " Browse list of files in current directory (Denite)
+" nmap <leader>t :DeniteProjectDir file/rec<CR>
+" " Search current directory for occurences of given term and close window if no results
+" nnoremap <leader>a :<C-u>Denite grep:. -no-empty<CR>
+" nnoremap ss :<C-u>DeniteCursorWord grep:.<CR>
+" " Resume previous denite search list
+" nnoremap <leader>p :<C-u>Denite -resume<CR>
 
-" Browse list of files in current directory (Denite)
-nmap <leader>t :DeniteProjectDir file/rec<CR>
-
-" Search current directory for occurences of given term and close window if no results
-nnoremap <leader>a :<C-u>Denite grep:. -no-empty<CR>
-
+" don't search in normal mode list buffer, instead search in insert mode
+nmap <leader>; :CocList --normal --auto-preview buffers<CR>
+nmap <leader>t :CocList --auto-preview files <CR>
 " Search current directory for occurences of word under cursor
-nnoremap <leader>r :<C-u>DeniteCursorWord grep:.<CR>
+command! -nargs=1 CocGrep silent CocList --auto-preview grep <args>
+nnoremap <leader>a :CocGrep<space>
+nnoremap ss :exe 'CocList --auto-preview -I --input='.expand('<cword>').' grep'<CR>
+nnoremap <leader>p :CocListResume<CR>
 
-" Resume previous denite search list
-nnoremap <leader>p :<C-u>Denite -resume<CR>
+" Search and replace
+" map <leader>s :%s///<left><left>
+" search word under cursor, search string in .py, .js .vue files
+" sp if\ '\$now'  # search string "if '$now'" in python files
+" command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
+" command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
+" command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
+" command! -nargs=1 Gg silent Ggrep! -E "<args>" -- *.py *.js *.vue | cw | redraw!
+" nnoremap ss :Ggrw <cword><CR>
+" nnoremap sp :Ggpy<space>
+" nnoremap sv :Ggjv<space>
+" nnoremap sa :Gg<space>
 
 " --------------- vim plugin setup ---- coc.nvim keymappings ------------------
 let g:coc_enable_locationlist = 0
@@ -565,7 +590,7 @@ nmap <nowait><silent>gd <Plug>(coc-definition)
 nmap <nowait><silent>gr <Plug>(coc-references)
 " Auto fix current
 nmap <nowait><silent>qf <Plug>(coc-fix-current)
-nmap <nowait><silent>ac <Plug>(coc-codeaction)
+nmap <nowait><silent>ac <Plug>(coc-codeaction-line)
 " xmap <silent> acs <Plug>(coc-codeaction-selected)
 " nmap <silent> acs <Plug>(coc-codeaction-selected)
 
@@ -851,6 +876,7 @@ inoremap {;<CR> {<CR>};<ESC>O
 imap cll console.log(;<Esc>==ci)
 
 let g:coc_global_extensions = [
+  \ "coc-lists",
   \ "coc-html",
   \ "coc-css",
   \ "coc-tsserver",
@@ -859,6 +885,7 @@ let g:coc_global_extensions = [
   \ "coc-highlight",
   \ "coc-pyright",
   \ "coc-vetur",
+  \ "coc-yaml",
   \ "coc-prettier"]
 
 autocmd myvimrc FileType python let b:coc_root_patterns = ['.git', '.env']
@@ -930,19 +957,6 @@ let vim_markdown_preview_hotkey='<C-m>'
 let g:gundo_prefer_python3 = 1
 let g:gundo_preview_bottom = 1
 nnoremap <nowait><silent>gu :GundoToggle<CR>
-
-" Search and replace
-" map <leader>s :%s///<left><left>
-" search word under cursor, search string in .py, .js .vue files
-" sp if\ '\$now'  # search string "if '$now'" in python files
-command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
-command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
-command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
-command! -nargs=1 Gg silent Ggrep! -E "<args>" -- *.py *.js *.vue | cw | redraw!
-nnoremap ss :Ggrw <cword><CR>
-nnoremap sp :Ggpy<space>
-nnoremap sv :Ggjv<space>
-nnoremap sa :Gg<space>
 
 function SetConfType()
   if !empty(matchstr(getline('1'), '^#\s.*'))

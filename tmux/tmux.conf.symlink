@@ -66,9 +66,9 @@ bind -n WheelDownPane select-pane -t= \; send-keys -M
 bind r source-file ~/.tmux.conf \; display "tmux.conf reloaded"
 
 # Bind <prefix>- to split window horizontally
-bind - split-window -v
+bind - split-window -v -c "#{pane_current_path}"
 # Bind <prefix>| to split window vertically
-bind \\ split-window -h
+bind \\ split-window -h -c "#{pane_current_path}"
 # resize panes using PREFIX H, J, K, L
 bind H resize-pane -L 5
 bind J resize-pane -D 5
