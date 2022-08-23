@@ -130,6 +130,7 @@ Plug 'hashivim/vim-terraform'
 Plug 'mechatroner/rainbow_csv'
 
 Plug 'sjl/gundo.vim'
+Plug 'jiangmiao/auto-pairs'
 
 " Initialize plugin system
 call plug#end()

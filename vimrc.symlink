@@ -562,9 +562,9 @@ endfunction
 nmap <leader>; :CocList --normal --auto-preview buffers<CR>
 nmap <leader>t :CocList --auto-preview files <CR>
 " Search current directory for occurences of word under cursor
-command! -nargs=1 CocGrep silent CocList --auto-preview grep <args>
+command! -nargs=1 CocGrep execute "let @/ = '<args>' | set hlsearch | silent CocList --auto-preview grep <args> "
 nnoremap <leader>a :CocGrep<space>
-nnoremap ss :exe 'CocList --auto-preview -I --input='.expand('<cword>').' grep'<CR>
+nnoremap ss :exe 'CocList --auto-preview --normal -I --input='.expand('<cword>').' grep'<CR>
 nnoremap <leader>p :CocListResume<CR>
 
 " Search and replace
@@ -572,12 +572,12 @@ nnoremap <leader>p :CocListResume<CR>
 " search word under cursor, search string in .py, .js .vue files
 " sp if\ '\$now'  # search string "if '$now'" in python files
 " command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
-" command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
-" command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
+command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
+command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
 " command! -nargs=1 Gg silent Ggrep! -E "<args>" -- *.py *.js *.vue | cw | redraw!
 " nnoremap ss :Ggrw <cword><CR>
-" nnoremap sp :Ggpy<space>
-" nnoremap sv :Ggjv<space>
+nnoremap sp :Ggpy<space>
+nnoremap sv :Ggjv<space>
 " nnoremap sa :Gg<space>
 
 " --------------- vim plugin setup ---- coc.nvim keymappings ------------------
@@ -593,6 +593,8 @@ nmap <nowait><silent>qf <Plug>(coc-fix-current)
 nmap <nowait><silent>ac <Plug>(coc-codeaction-line)
 " xmap <silent> acs <Plug>(coc-codeaction-selected)
 " nmap <silent> acs <Plug>(coc-codeaction-selected)
+" xmap <silent> acs <Plug>(coc-codeaction-cursor)
+" nmap <silent> acs <Plug>(coc-codeaction-cursor)
 
 " --------------- vim plugin setup ---- vim-better-whitespace keymappings -----
 " Automatically remove trailing whitespace
@@ -661,7 +663,7 @@ function! ToggleQuickFix()
   endif
 endfunction
 
-function! IntegrateQuitKeyMappings()
+function! UpdateQuitKeyMapping()
   if mapcheck('gq') == ""
     if !exists("b:fugitive_type") || b:fugitive_type != 'commit'
       " normal buffer, gq to toggle quickfix buffer
@@ -686,7 +688,7 @@ function! IntegrateQuitKeyMappings()
     nnoremap <nowait><silent><buffer>gq :GundoToggle<CR>
   endif
 endfunction
-autocmd myvimrc BufEnter,CmdwinEnter * call IntegrateQuitKeyMappings()
+autocmd myvimrc BufEnter,CmdwinEnter * call UpdateQuitKeyMapping()
 autocmd myvimrc BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
@@ -861,20 +863,7 @@ function! ToggleBinaryMode()
 endfunction
 nnoremap <silent> <leader>b :call ToggleBinaryMode()<CR>
 
-" key mappings to replace vim-close behaviors
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap (; ();<left>
-inoremap (<CR> (<CR>)<ESC>O
-inoremap [ []<left>
-inoremap [<CR> [<CR>]<ESC>O
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {,<CR> {<CR>},<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
-imap cll console.log(;<Esc>==ci)
-
+imap cll console.log();<left><left>
 let g:coc_global_extensions = [
   \ "coc-lists",
   \ "coc-html",
