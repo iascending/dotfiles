@@ -27,13 +27,14 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'tommcdo/vim-exchange'
 
 " tpope's vim plugins
+Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish'
-" Plug 'suy/vim-context-commentstring'
+Plug 'jlanzarotta/bufexplorer'
 
 " indentation
 Plug 'yggdroot/indentline'
@@ -83,8 +84,8 @@ Plug 'mattn/emmet-vim'
 Plug 'chr4/nginx.vim'
 
 " Syntax highlighting for javascript libraries
-Plug 'pangloss/vim-javascript'
-" Plug 'othree/javascript-libraries-syntax.vim'
+" Plug 'pangloss/vim-javascript'
+Plug 'sheerun/vim-polyglot'
 
 " Improved syntax highlighting and indentation
 " Possiblely slow down vim-vue and vim-vue-plugins

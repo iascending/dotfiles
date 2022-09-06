@@ -18,6 +18,7 @@ set wildignore+=**/dist/**,**/build/**
 
 " Set encoding for editor itself, scriptencoding for vim scripts
 set encoding=utf-8
+set nocompatible
 
 " Enable mouse in all mode
 set mouse=a
@@ -39,7 +40,6 @@ set splitright
 
 " Don't dispay mode in command line (airilne already shows it)
 set noshowmode
-set nocompatible
 
 " Don't give completion message
 set shortmess+=c
@@ -81,8 +81,8 @@ set hidden
 set expandtab
 
 " Show a visual horizontal and vertical line under cursor
-" set cursorline
-" set cursorcolumn
+set cursorline
+set cursorcolumn
 
 " Show window title
 set title
@@ -421,17 +421,6 @@ endtry
 set cmdheight=2
 let g:echodoc#enable_at_startup = 1
 
-" --------------- vim plugin setup ---- vim-javascript ------------------------
-" Enable syntax highlighting for JSDoc
-let g:javascript_plugin_jsdoc = 1
-
-"-- ------------- vim plugin setup ---- vim-jsx -------------------------------
-" Highlight jsx syntax even in non .jsx files
-let g:jsx_ext_required = 0
-
-" --------------- vim plugin setup ---- javascript-libraries-syntax -----------
-let g:used_javascript_libs = 'underscore,requirejs,chai,jquery'
-
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 let g:signify_sign_delete = '-'
 
@@ -467,7 +456,6 @@ endfunction
 
 " --------------- vim plugin setup ---- vim-indentline ------------------------
 let g:indentLine_enabled = 1
-" let g:indentLine_char = '▏'
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 nnoremap <nowait><silent>yoi :IndentLinesToggle<CR>
 
@@ -521,8 +509,8 @@ autocmd myvimrc ColorScheme * call s:DiffChangesExtraHighlights()
 autocmd myvimrc ColorScheme OceanicNext,papercolor call s:DarkBackgroundExtraHighlights()
 
 " colorscheme OceanicNext
-" colorscheme gruvbox
-colorscheme xcode
+colorscheme gruvbox
+" colorscheme xcode
 
 " --------------- vim plugin setup ---- NerdTree ------------------------------
 " Toggle NERDTree on/off
@@ -548,56 +536,43 @@ function! s:GrepArgs(...)
 endfunction
 
 " --------------- vim plugin setup ---- denite keymappings --------------------
-" " Browser currently open buffers with (Denite)
-" nmap <leader>; :Denite buffer<CR>
-" " Browse list of files in current directory (Denite)
-" nmap <leader>t :DeniteProjectDir file/rec<CR>
-" " Search current directory for occurences of given term and close window if no results
-" nnoremap <leader>a :<C-u>Denite grep:. -no-empty<CR>
+" Browser currently open buffers with (Denite)
+" nmap <nowait><leader>; :Denite buffer<CR>
+" Browse list of files in current directory (Denite)
+nmap <leader>t :DeniteProjectDir file/rec<CR>
+" Search current directory for occurences of given term and close window if no results
+nnoremap <leader>a :<C-u>Denite grep:. -no-empty<CR>
 " nnoremap ss :<C-u>DeniteCursorWord grep:.<CR>
-" " Resume previous denite search list
-" nnoremap <leader>p :<C-u>Denite -resume<CR>
+" Resume previous denite search list
+nnoremap <leader>p :<C-u>Denite -resume<CR>
 
-" don't search in normal mode list buffer, instead search in insert mode
-nmap <leader>; :CocList --normal --auto-preview buffers<CR>
-nmap <leader>t :CocList --auto-preview files <CR>
-" Search current directory for occurences of word under cursor
-command! -nargs=1 CocGrep execute "let @/ = '<args>' | set hlsearch | silent CocList --auto-preview grep <args> "
-nnoremap <leader>a :CocGrep<space>
-nnoremap ss :exe 'CocList --auto-preview --normal -I --input='.expand('<cword>').' grep'<CR>
-nnoremap <leader>p :CocListResume<CR>
+nmap <nowait><leader>; :<C-u>BufExplorerHorizontalSplit<CR>
 
 " Search and replace
 " map <leader>s :%s///<left><left>
 " search word under cursor, search string in .py, .js .vue files
 " sp if\ '\$now'  # search string "if '$now'" in python files
-" command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
-command! -nargs=1 Ggjv silent Ggrep! -E "<args>" *.js *.vue | cw | redraw!
-command! -nargs=1 Ggpy silent Ggrep! -E "<args>" -- "*.py" | cw | redraw!
-" command! -nargs=1 Gg silent Ggrep! -E "<args>" -- *.py *.js *.vue | cw | redraw!
-" nnoremap ss :Ggrw <cword><CR>
-nnoremap sp :Ggpy<space>
-nnoremap sv :Ggjv<space>
-" nnoremap sa :Gg<space>
+set grepformat=%f:%l:%c:%m
+set grepprg=rg\ --vimgrep\ --smart-case\ --hidden\ --files\ --glob\ !.git\ --heading\ -S\ -F
+command! -nargs=+ Ggrw execute 'silent Ggrep!' <q-args> | cw | redraw!
+command! -nargs=1 Gg silent Ggrep! -E "<args>" -- *.py *.js *.vue | cw | redraw!
+nnoremap ss :Ggrw <cword><CR>
+nnoremap sa :Gg<space>
+autocmd myvimrc QuickFixCmdPost *grep* cwindow 25
+autocmd myvimrc QuickFixCmdPost * set modifiable
 
 " --------------- vim plugin setup ---- coc.nvim keymappings ------------------
 let g:coc_enable_locationlist = 0
 autocmd myvimrc User CocLocationsChange CocList --no-quit --normal location
 
-" Jump to definition of current symbol
 nmap <nowait><silent>gd <Plug>(coc-definition)
-" Jump to references of current symbol
 nmap <nowait><silent>gr <Plug>(coc-references)
-" Auto fix current
 nmap <nowait><silent>qf <Plug>(coc-fix-current)
 nmap <nowait><silent>ac <Plug>(coc-codeaction-line)
-" xmap <silent> acs <Plug>(coc-codeaction-selected)
-" nmap <silent> acs <Plug>(coc-codeaction-selected)
-" xmap <silent> acs <Plug>(coc-codeaction-cursor)
-" nmap <silent> acs <Plug>(coc-codeaction-cursor)
 
 " --------------- vim plugin setup ---- vim-better-whitespace keymappings -----
 " Automatically remove trailing whitespace
+" let g:current_line_whitespace_disabled_soft=1
 nnoremap <leader>cw :StripWhitespace<CR>
 
 " --------------- vim plugin setup ---- vim-easymotion ------------------------
@@ -957,7 +932,7 @@ autocmd myvimrc BufEnter *.txt call SetConfType()
 packadd! Cfilter
 let g:vim_json_conceal=0
 set history=10000
-set cmdwinheight=15
+set cmdwinheight=25
 
 " --------------- vim-unimpaired shortcuts --------------------------
 " [b ]b # :bprevious :bnext

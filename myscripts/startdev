@@ -19,7 +19,7 @@ fi
 # source python virtualenv
 tmux send-keys "cd ~/work/blendopt" Enter >/dev/null 2>&1
 tmux send-keys "workon blendopt; clear" Enter >/dev/null 2>&1
-tmux send-keys "pycharm .; clear" Enter >/dev/null 2>&1
+# tmux send-keys "pycharm .; clear" Enter >/dev/null 2>&1
 
 # create panes  run frontend server
 tmux splitw -h
