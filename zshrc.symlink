@@ -280,3 +280,7 @@ alias ll="exa --long --links --blocks --git --accessed --modified --created --gr
 # CTRL-T        # paste selected onto command line
 # CTRL-R        # paste selected history onto command line
 # ALT-C         # cd into selected directory
+
+# run aws auto completion
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit

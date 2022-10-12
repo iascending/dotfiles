@@ -61,7 +61,9 @@ set shellcmdflag=-c
 set autoread
 autocmd myvimrc CursorHold * if mode() != '\v(c|r.?|!|t)' && getcmdwintype() == '' | checktime | endif
 
-syntax on
+if !exists('g:syntax_on')
+  syntax enable
+endif
 filetype plugin indent on
 
 " Enable line numbers
@@ -365,15 +367,32 @@ let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir
 let g:airline_theme='papercolor'
 " let g:airline_theme='simple'
 " let g:airline_theme='gruvbox'
+let g:airline_mode_map = {
+      \ '__'     : '-',
+      \ 'c'      : 'COMMAND',
+      \ 'i'      : 'INSERT',
+      \ 'ic'     : 'INSERT',
+      \ 'ix'     : 'INSERT',
+      \ 'n'      : 'NORMAL',
+      \ 'multi'  : 'MULTI',
+      \ 'ni'     : 'NORMAL',
+      \ 'no'     : 'NORMAL',
+      \ 'R'      : 'R',
+      \ 'Rv'     : 'R',
+      \ 's'      : 'S',
+      \ 'S'      : 'S',
+      \ ''     : 'S',
+      \ 't'      : 'T',
+      \ 'v'      : 'VISUAL',
+      \ 'V'      : 'VISUAL',
+      \ ''     : 'VISUAL',
+      \ }
  " Wrap in try/catch to avoid errors on initial install before plugin is available
 try
   " Enable extensions
-  " let g:airline_extensions = ['branch', 'hunks', 'coc']
   let g:airline_extensions = ['branch']
   " Do not draw separators for empty sections (only for the active window) >
-  let g:airline_skip_empty_sections = 1
-  " Smartly uniquify buffers names with similar filename, suppressing common parts of paths.
-  let g:airline#extensions#tabline#formatter = 'unique_tail'
+  let g:airline#extensions#branch#enabled = 1
   " Custom setup that removes filetype/whitespace from default vim airline bar
   let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
 
@@ -401,12 +420,12 @@ try
   let g:airline_symbols.maxlinenr = ''
   let g:airline_symbols.dirty='⚡'
 
-  let g:airline_section_a = airline#section#create(['paste', 'mode'])
   function! AirlineInit()
-    let g:airline_section_b = airline#section#create(['branch'])
+    let g:airline_section_a = airline#section#create(['paste', ' ', 'mode'])
+    let g:airline_section_b = airline#section#create_left(['branch'])
     call airline#update_statusline()
   endfunction
-  autocmd myvimrc VimEnter * call AirlineInit()
+  autocmd myvimrc User AirlineAfterInit call AirlineInit()
 
   " Enable caching of syntax highlighting groups
   let g:airline_highlighting_cache = 1
@@ -425,34 +444,7 @@ let g:echodoc#enable_at_startup = 1
 let g:signify_sign_delete = '-'
 
 " --------------- vim plugin setup ---- vim-vue-plugin ------------------------
-"  this set of config: vim-vue-plugin without vim-context-commentstring
-let g:vim_vue_plugin_config = {
-  \'syntax': {
-  \   'template': ['html'],
-  \   'script': ['javascript'],
-  \   'style': ['css'],
-  \},
-  \'full_syntax': [],
-  \'initial_indent': ['script', 'style'],
-  \'attribute': 1,
-  \'keyword': 1,
-  \'foldexpr': 1,
-  \'debug': 0,
-  \}
-
-" config vue comment format for vim-commentary plugin
-function! OnChangeVueSyntax(syntax)
-  echom 'Syntax is '.a:syntax
-  if a:syntax == 'html'
-    setlocal commentstring=<!--%s-->
-    setlocal comments=s:<!--,m:\ \ \ \ ,e:-->
-  elseif a:syntax =~ 'css'
-    setlocal comments=s1:/*,mb:*,ex:*/ commentstring&
-  else
-    setlocal commentstring=//%s
-    setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://
-  endif
-endfunction
+let g:vue_pre_processors = []
 
 " --------------- vim plugin setup ---- vim-indentline ------------------------
 let g:indentLine_enabled = 1
@@ -503,8 +495,8 @@ function! s:DiffChangesExtraHighlights()
 endfunction
 
 " to fix highllighting strips around trans blocks in vue files
-let html_no_rendering=1
-autocmd myvimrc ColorScheme * call TrailingSpaceHighlights()
+" let html_no_rendering=1
+" autocmd myvimrc ColorScheme * call TrailingSpaceHighlights()
 autocmd myvimrc ColorScheme * call s:DiffChangesExtraHighlights()
 autocmd myvimrc ColorScheme OceanicNext,papercolor call s:DarkBackgroundExtraHighlights()
 
@@ -572,7 +564,7 @@ nmap <nowait><silent>ac <Plug>(coc-codeaction-line)
 
 " --------------- vim plugin setup ---- vim-better-whitespace keymappings -----
 " Automatically remove trailing whitespace
-" let g:current_line_whitespace_disabled_soft=1
+let g:current_line_whitespace_disabled_soft=1
 nnoremap <leader>cw :StripWhitespace<CR>
 
 " --------------- vim plugin setup ---- vim-easymotion ------------------------
@@ -662,8 +654,15 @@ function! UpdateQuitKeyMapping()
     " toggle Gundo.vim buffer open and close
     nnoremap <nowait><silent><buffer>gq :GundoToggle<CR>
   endif
+  if (bufname('%') == '[BufExplorer]')
+    " close BufExplorer split
+    nnoremap <nowait><silent><buffer>gq :normal q<CR>
+  endif
+  if (&buftype == 'quickfix')
+    nnoremap <nowait><silent><buffer>gq :call ToggleQuickFix()<CR>
+  endif
 endfunction
-autocmd myvimrc BufEnter,CmdwinEnter * call UpdateQuitKeyMapping()
+autocmd myvimrc BufEnter,CmdwinEnter,QuickFixCmdPost * call UpdateQuitKeyMapping()
 autocmd myvimrc BufReadPost fugitive://* set bufhidden=delete
 
 " --------------- vim plugin setup ---- open-browser.vim  ---------------------
@@ -680,7 +679,7 @@ nnoremap ghc viW"ay:OpenGithubCommit <C-R>a &<CR><CR>
 
 " --------------- vim plugin setup ---- vim-signify ---------------------------
 " Set updatetime for vim-signify
-set updatetime=1000
+set updatetime=500
 nnoremap <nowait><silent>du :SignifyHunkUndo<CR>
 nnoremap <nowait><silent>dc :SignifyHunkDiff<CR>
 nmap ]c <plug>(signify-next-hunk)
@@ -933,6 +932,11 @@ packadd! Cfilter
 let g:vim_json_conceal=0
 set history=10000
 set cmdwinheight=25
+
+" --------------- vim plugin setup ---- auto-pairs --------------------------
+let g:AutoPairsShortcutBackInsert = '<C-b>'
+let g:AutoPairsShortcutFastWrap = '<C-e>'
+let g:AutoPairsShortcutToggle = '<C-p>'
 
 " --------------- vim-unimpaired shortcuts --------------------------
 " [b ]b # :bprevious :bnext

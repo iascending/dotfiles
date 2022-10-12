@@ -33,6 +33,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-commentary'
+Plug 'suy/vim-context-commentstring'
 Plug 'tpope/vim-abolish'
 Plug 'jlanzarotta/bufexplorer'
 
@@ -75,17 +76,15 @@ Plug 'mxw/vim-jsx'
 Plug 'heavenshell/vim-jsdoc'
 
 " Vuejs plugin
-Plug 'leafOfTree/vim-vue-plugin'
+" Plug 'leafOfTree/vim-vue-plugin'
 Plug 'mattn/emmet-vim'
-" Plug 'posva/vim-vue'
+Plug 'posva/vim-vue'
 
 " === Syntax Highlighting === "
 " Syntax highlighting for nginx
 Plug 'chr4/nginx.vim'
 
-" Syntax highlighting for javascript libraries
-" Plug 'pangloss/vim-javascript'
-Plug 'sheerun/vim-polyglot'
+Plug 'pangloss/vim-javascript'
 
 " Improved syntax highlighting and indentation
 " Possiblely slow down vim-vue and vim-vue-plugins
